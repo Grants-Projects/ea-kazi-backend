@@ -1,0 +1,24 @@
+{
+  "name": "ea-kazi-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Near-Grants-Projects/ea-kazi-backend.git"
+  },
+  "author": "marv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Near-Grants-Projects/ea-kazi-backend/issues"
+  },
+  "homepage": "https://github.com/Near-Grants-Projects/ea-kazi-backend#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "tsyringe": "^4.7.0",
+    "typeorm": "^0.3.7"
+  }
+}
