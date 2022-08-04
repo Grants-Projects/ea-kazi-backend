@@ -2,18 +2,13 @@ import { injectable } from "tsyringe";
 
 
 @injectable()
-class UserController {
-    constructor(
-      ) {
-      
-      }
+export class UserController {
+    
    
       someThing = async(req, res)=>{
 
-
+console.log('hi')
       }
 
 
 }
-
-export default UserController;

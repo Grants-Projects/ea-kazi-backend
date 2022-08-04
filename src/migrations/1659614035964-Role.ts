@@ -4,12 +4,11 @@ import {
   MigrationInterface,
   QueryRunner,
   Table,
-  TableForeignKey,
 } from "typeorm";
 
-export class Courses1659482205775 implements MigrationInterface {
+export class Role1659614035964 implements MigrationInterface {
   userTable = new Table({
-    name: "course",
+    name: "role",
     columns: [
       {
         name: "id",
@@ -19,28 +18,13 @@ export class Courses1659482205775 implements MigrationInterface {
         generationStrategy: "uuid",
       },
       {
-        name: "owner_id",
-        type: "uuid",
-        default: null
-      },
-      {
         name: "name",
         type: "varchar",
         default: null,
       },
       {
-        name: "metadata",
+        name: "description",
         type: "varchar",
-        default: null,
-      },
-      {
-        name: "approvedBy",
-        type: "varchar",
-        default: null,
-      },
-      {
-        name: "approvedAt",
-        type: "timestamp",
         default: null,
       },
       {
@@ -58,15 +42,6 @@ export class Courses1659482205775 implements MigrationInterface {
 
   async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(this.userTable, true);
-
-    await queryRunner.createForeignKey(
-      "course",
-      new TableForeignKey({
-        columnNames: ["owner_id"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "user"
-      })
-    );
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {

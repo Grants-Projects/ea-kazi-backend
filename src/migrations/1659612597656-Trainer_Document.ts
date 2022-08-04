@@ -7,9 +7,9 @@ import {
   TableForeignKey,
 } from "typeorm";
 
-export class Courses1659482205775 implements MigrationInterface {
+export class TrainerDocument1659612597656 implements MigrationInterface {
   userTable = new Table({
-    name: "course",
+    name: "tainer_document",
     columns: [
       {
         name: "id",
@@ -19,27 +19,22 @@ export class Courses1659482205775 implements MigrationInterface {
         generationStrategy: "uuid",
       },
       {
-        name: "owner_id",
+        name: "trainer_id",
         type: "uuid",
-        default: null
+        default: null,
       },
       {
-        name: "name",
+        name: "doc_type",
         type: "varchar",
         default: null,
       },
       {
-        name: "metadata",
-        type: "varchar",
-        default: null,
+        name: "status",
+        type: "enum",
+        enum: ["VERIFIED", "BLOCKED", "NOT_VERIFIED", "PROCESSING"],
       },
       {
-        name: "approvedBy",
-        type: "varchar",
-        default: null,
-      },
-      {
-        name: "approvedAt",
+        name: "expiry_date",
         type: "timestamp",
         default: null,
       },
@@ -60,11 +55,11 @@ export class Courses1659482205775 implements MigrationInterface {
     await queryRunner.createTable(this.userTable, true);
 
     await queryRunner.createForeignKey(
-      "course",
+      "tainer_document",
       new TableForeignKey({
-        columnNames: ["owner_id"],
+        columnNames: ["trainer_id"],
         referencedColumnNames: ["id"],
-        referencedTableName: "user"
+        referencedTableName: "user",
       })
     );
   }

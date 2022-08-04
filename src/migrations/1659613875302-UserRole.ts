@@ -7,9 +7,9 @@ import {
   TableForeignKey,
 } from "typeorm";
 
-export class Courses1659482205775 implements MigrationInterface {
+export class UserRole1659613875302 implements MigrationInterface {
   userTable = new Table({
-    name: "course",
+    name: "user_role",
     columns: [
       {
         name: "id",
@@ -19,28 +19,13 @@ export class Courses1659482205775 implements MigrationInterface {
         generationStrategy: "uuid",
       },
       {
-        name: "owner_id",
+        name: "user_id",
         type: "uuid",
-        default: null
-      },
-      {
-        name: "name",
-        type: "varchar",
         default: null,
       },
       {
-        name: "metadata",
-        type: "varchar",
-        default: null,
-      },
-      {
-        name: "approvedBy",
-        type: "varchar",
-        default: null,
-      },
-      {
-        name: "approvedAt",
-        type: "timestamp",
+        name: "role_id",
+        type: "uuid",
         default: null,
       },
       {
@@ -60,13 +45,21 @@ export class Courses1659482205775 implements MigrationInterface {
     await queryRunner.createTable(this.userTable, true);
 
     await queryRunner.createForeignKey(
-      "course",
+      "user_role",
       new TableForeignKey({
-        columnNames: ["owner_id"],
+        columnNames: ["user_id"],
         referencedColumnNames: ["id"],
-        referencedTableName: "user"
+        referencedTableName: "user",
       })
     );
+    await queryRunner.createForeignKey(
+        "user_role",
+        new TableForeignKey({
+          columnNames: ["role_id"],
+          referencedColumnNames: ["id"],
+          referencedTableName: "role",
+        })
+      );
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {

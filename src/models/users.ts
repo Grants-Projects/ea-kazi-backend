@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import {
   Entity,
   Column,
@@ -6,39 +5,37 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
-  VersionColumn,
 } from 'typeorm'
 
-@Entity('users')
-export class Users extends BaseEntity {
+@Entity('user')
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
-  @Column('simple-array')
-  scopes!: string[]
-
-  @Column('firstname')
+  @Column()
   firstname!: string
 
-  @Column('lastname')
+  @Column()
   lastname!: string
 
-  @Column('email')
+  @Column()
   email!: string
-  
-  @Column({
-    type: 'enum',
-    enum: ['TRAINER', 'TRAINEE', 'RECRUITER'],
-    default: 'TRAINEE',
-  })
-  user_type!: string
 
-  @Column({
-    type: 'enum',
-    enum: ['PENDING', 'VERIFIED', 'FAILED'],
-    default: 'PENDING',
-  })
+  @Column()
+  bio!: string
   
+  // @Column({
+  //   type: 'enum',
+  //   enum: ['VERIFIED', 'BLOCKED', 'NOT_VERIFIED'],
+  //   default: 'NOT_VERIFIED',
+  // })
+  // status!: string
+
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  verifiedAt!: Date
+
   @CreateDateColumn({
     type: 'timestamp',
   })
