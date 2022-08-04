@@ -14,12 +14,12 @@ export class User1659482181387 implements MigrationInterface {
         generationStrategy: "uuid",
       },
       {
-        name: "firstname",
+        name: "first_name",
         type: "varchar",
         default: null,
       },
       {
-        name: "lastname",
+        name: "last_name",
         type: "varchar",
         default: null,
       },
@@ -39,7 +39,7 @@ export class User1659482181387 implements MigrationInterface {
         default: null,
       },
       {
-        name: "verifiedAt",
+        name: "verified_at",
         type: "timestamp",
         default: null,
       },

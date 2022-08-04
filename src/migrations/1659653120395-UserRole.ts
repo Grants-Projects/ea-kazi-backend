@@ -7,7 +7,7 @@ import {
   TableForeignKey,
 } from "typeorm";
 
-export class UserRole1659613875302 implements MigrationInterface {
+export class UserRole1659653120395 implements MigrationInterface {
   userTable = new Table({
     name: "user_role",
     columns: [
@@ -53,13 +53,13 @@ export class UserRole1659613875302 implements MigrationInterface {
       })
     );
     await queryRunner.createForeignKey(
-        "user_role",
-        new TableForeignKey({
-          columnNames: ["role_id"],
-          referencedColumnNames: ["id"],
-          referencedTableName: "role",
-        })
-      );
+      "user_role",
+      new TableForeignKey({
+        columnNames: ["role_id"],
+        referencedColumnNames: ["id"],
+        referencedTableName: "role",
+      })
+    );
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {

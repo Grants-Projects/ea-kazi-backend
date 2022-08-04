@@ -34,12 +34,12 @@ export class Courses1659482205775 implements MigrationInterface {
         default: null,
       },
       {
-        name: "approvedBy",
+        name: "approved_by",
         type: "varchar",
         default: null,
       },
       {
-        name: "approvedAt",
+        name: "approved_at",
         type: "timestamp",
         default: null,
       },

@@ -1,12 +1,8 @@
 /** @format */
 
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-} from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class Role1659614035964 implements MigrationInterface {
+export class Role1659653069162 implements MigrationInterface {
   userTable = new Table({
     name: "role",
     columns: [
