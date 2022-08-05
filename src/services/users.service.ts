@@ -1,5 +1,4 @@
 
-import { Users } from '../models'
 
 //@injectable()
 export class UserService {

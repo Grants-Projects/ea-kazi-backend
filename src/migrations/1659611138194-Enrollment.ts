@@ -7,9 +7,9 @@ import {
   TableForeignKey,
 } from "typeorm";
 
-export class Courses1659482205775 implements MigrationInterface {
+export class Enrollment1659611138194 implements MigrationInterface {
   userTable = new Table({
-    name: "course",
+    name: "enrollment",
     columns: [
       {
         name: "id",
@@ -19,27 +19,22 @@ export class Courses1659482205775 implements MigrationInterface {
         generationStrategy: "uuid",
       },
       {
-        name: "owner_id",
+        name: "trainee_id",
         type: "uuid",
-        default: null
-      },
-      {
-        name: "name",
-        type: "varchar",
         default: null,
       },
       {
-        name: "metadata",
-        type: "varchar",
+        name: "course_batch_id",
+        type: "uuid",
         default: null,
       },
       {
-        name: "approved_by",
-        type: "varchar",
+        name: "start_at",
+        type: "timestamp",
         default: null,
       },
       {
-        name: "approved_at",
+        name: "end_at",
         type: "timestamp",
         default: null,
       },
@@ -60,11 +55,20 @@ export class Courses1659482205775 implements MigrationInterface {
     await queryRunner.createTable(this.userTable, true);
 
     await queryRunner.createForeignKey(
-      "course",
+      "enrollment",
       new TableForeignKey({
-        columnNames: ["owner_id"],
+        columnNames: ["course_batch_id"],
         referencedColumnNames: ["id"],
-        referencedTableName: "user"
+        referencedTableName: "course_batch",
+      })
+    );
+
+    await queryRunner.createForeignKey(
+      "enrollment",
+      new TableForeignKey({
+        columnNames: ["trainee_id"],
+        referencedColumnNames: ["id"],
+        referencedTableName: "user",
       })
     );
   }
