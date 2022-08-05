@@ -1,0 +1,221 @@
+openapi: 3.0.1
+info:
+  title: Common Models for Distancia
+  description: >
+    # About Common Models
+
+    Common models contains reusable components that can be referenced by othter
+    specification files across different product organizations.
+
+
+   
+  version: '1.0'
+servers:
+  - url: /
+paths: {}
+x-organization: core
+x-service-id: common
+x-source-repository: distancia/openapi
+x-source-path: services/common.yaml
+components:
+  schemas:
+    ErrorMessageDto:
+      description: >-
+        Default error object for services. This gives consistent error object
+        that all services may use.
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: UNKNOWN_ERROR
+        message:
+          type: string
+          description: Descriptive error message
+          example: Request could not be completed due to an error
+        data:
+          type: object
+          description: Additional data for this error message.
+          additionalProperties: true
+          properties: {}
+      x-common-model: ErrorMessageDto
+    StatusDto:
+      description: Status data, check additional message field.
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          description: >-
+            Status can be successful or failed, a value of true indicates
+            success.
+          type: boolean
+          example: true
+        message:
+          type: string
+          description: additional message describing status.
+        data:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          description: Data associated with the status, this will not always be present
+        error:
+          $ref: '#/components/schemas/ErrorMessageDto'
+      x-common-model: StatusDto
+    Metadata:
+      type: object
+      description: Metadata object, for extending properties of an object.
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          description: name of metadata
+          example: meta_name
+        value:
+          type: string
+          description: any value to represent
+      x-common-model: Metadata
+    UUID:
+      type: string
+      format: uuid
+      example: 3a5aaea8-504a-4404-ad3d-b82574fba5e5
+      description: General format for UUID
+    TokenDetails:
+      required:
+        - contractAddress
+        - decimals
+        - name
+        - symbol
+      type: object
+      properties:
+        logoUrl:
+          description: >-
+            URL to logo, see https://github.com/trustwallet/assets for possible
+            URLs
+          type: string
+          format: url
+          example: >-
+            https://assets.trustwalletapp.com/blockchains/smartchain/assets/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c/logo.png
+        decimals:
+          minimum: 0
+          type: integer
+          description: Number of decimals supported by this token
+          format: int32
+          example: 6
+        name:
+          type: string
+          description: Name of the token
+          example: Tether USD
+        symbol:
+          type: string
+          description: Symbol representing the token
+          example: USDT
+        contractAddress:
+          type: string
+          description: Contract Address for the token
+          example: 4.899829309868351e+47
+        network:
+          type: string
+          description: Network of the specified token
+      description: Properties of a token defined as ERC20, TRC20, or BEP20
+      x-common-model: TokenDetails
+    AssetAmount:
+      required:
+        - amount
+        - asset
+      type: object
+      properties:
+        amount:
+          minimum: 0
+          type: number
+          description: Quantity of the token/asset.
+          example: 433
+        asset:
+          type: string
+          description: Asset symbol.
+          example: BNB
+      description: asset/token amount along with currency.
+      x-common-model: AssetAmount
+    Timestamp:
+      type: string
+      format: date-time
+      description: Timestamp field.
+    PhoneNumber:
+      pattern: \+[1-9][0-9]{0,3}[0-9]{7,14}
+      type: string
+      format: phone
+      description: Phone number field.
+    PositiveInteger:
+      minimum: 0
+      type: integer
+      format: int32
+      description: Positive integer
+    PositiveDouble:
+      minimum: 0
+      type: number
+      description: Positive double
+    Paging:
+      description: Base object for paginated list
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Descriptive name for the list
+        size:
+          $ref: '#/components/schemas/PositiveInteger'
+        totalItems:
+          $ref: '#/components/schemas/PositiveInteger'
+        nextPage:
+          $ref: '#/components/schemas/PositiveInteger'
+        previousPage:
+          $ref: '#/components/schemas/PositiveInteger'
+      discriminator:
+        propertyName: name
+      x-common-model: Paging
+    AssetValue:
+      description: Asset value
+      minimum: 0
+      type: integer
+      format: number
+  parameters:
+    pageNumber:
+      name: page
+      in: query
+      description: Page number of items to return
+      schema:
+        type: integer
+        format: int32
+        default: 1
+    pageSize:
+      name: size
+      in: query
+      description: Number of items to return
+      schema:
+        type: integer
+        format: int32
+        default: 20
+  securitySchemes:
+    authToken:
+      type: apiKey
+      name: x-auth-token
+      in: header
+    basicAuth:
+      type: http
+      scheme: basic
+    apiKey:
+      type: apiKey
+      name: x-api-key
+      in: header
+    bearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+      description: Bearer token specified in authorization header

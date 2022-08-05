@@ -1,0 +1,328 @@
+openapi: 3.0.0
+info:
+  title: "Ea-kazi Backend Service"
+  description: "This service provides endpoints for all related interactions"
+  version: 1.0.0
+  contact:
+    name: "Marvelous"
+    email: "marv@distancia.com"
+
+x-organization: ea-kazi
+x-service-id: backend
+
+servers:
+  - description: Staging Ingress
+    url: https://api.ea-kazi
+
+tags:
+  - name: onboarding
+    description: "User onboarding related endpoints"
+  - name: auth
+    description: "auth related endpoints"
+  - name: course
+    description: "course related endpoints"
+
+security:
+  - bearerToken: [ ]
+
+paths:
+  /onboarding/signup:
+    post:
+      summary: "Endpoint to signup users"
+      operationId: saveUser
+      x-visibility: public
+      tags:
+        - "onboarding"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSignup"
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignupResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /auth/login:
+    post:
+      summary: "Endpoint to signup users"
+      operationId: loginUser
+      x-visibility: public
+      tags:
+        - "auth"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogin"
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /trainer/course:
+    post:
+      summary: "Endpoint to signup users"
+      operationId: createTrainerCourse
+      x-visibility: public
+      tags:
+        - "course"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StatusDto"
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+      
+
+
+
+components:
+  schemas:
+    # REQUEST OBJECT DEFINITIONS
+    UserSignup:
+      type: object
+      required:
+        - fullname
+        - email
+        - userRole
+        - password
+      properties:
+        fullname:
+          type: string
+          format: string
+          description: The fullname of User to be added
+        email:
+          type: string
+          description: User's email
+        password:
+          type: string
+          format: string
+          minLength: 8
+          maxLength: 30
+          pattern: '(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%^*?&-])[A-Za-z\d@$#!%^*?&-]'
+          description: The user password
+    
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: The email of the User attempting login
+        password:
+          type: string
+          description: The password set by the user during onboarding
+        address:
+          type: string
+          description: The address of the user
+
+    CourseRequest:
+      type: object
+      required:
+        - name
+        - metadata
+  
+    SuccessMessage:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Returns a true to state that action was successful
+          example: true
+        message:
+          type: string
+          description: Message for successful operation
+          example: Verification otp has been sent to your email
+   
+
+
+    # RESPONSE OBJECT DEFINITIONS
+  
+    SignupResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/User'
+
+    LoginResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - properties:
+            token:
+              type: string
+              format: jwt
+              description: authorizes a valid user
+
+    CourseResponse:
+      type: object
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+          description: "The id of the course"
+        name:
+          type: "string"
+          description: "The name of the course"
+        metadata:
+          type: "string"
+          description: "The metadata of the course"
+
+
+
+    User:
+      type: "object"
+      required:
+        - "id"
+        - "username"
+        - "email"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+          description: "The id of the User"
+        fullname:
+          type: "string"
+          description: "The username of user"
+        email:
+          type: "string"
+          format: "email"
+          description: "The email of user"
+        userRole:
+          type: "string"
+          description: "Role of a user"
+          
+
+    ErrorMessageDto:
+      $ref: "https://api-spec-common.s3.amazonaws.com/common.yaml#/components/schemas/ErrorMessageDto"
+
+    StatusDto:
+      $ref: "https://api-spec-common.s3.amazonaws.com/common.yaml#/components/schemas/StatusDto"
+
+
+    # ENUM DEFINITIONS
+  responses:
+    StatusResponse:
+      description: Request status
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/StatusDto"
+          example:
+            success: true
+            message: 'Action completed successfully'
+            data:
+              label: name of service
+              expiry: date
+    
+
+    InvalidRequest:
+      description: Request could not be validated
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'BAD_REQUEST'
+            message: 'Request could not be validated.'
+
+    Unauthorized:
+      description: Client is not authorized to make request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'UNAUTHORIZED'
+            message: 'Either client security header is missing or it is not valid.'
+
+    NotFound:
+      description: Entity was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'NOT_FOUND'
+            message: 'Information could not be found'
+
+    ConflictError:
+      description: Entity already exist while user tries to create it.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'ACCESS_DENIED'
+            message: 'Entity already exist!'
+
+    AccessDenied:
+      description: Expected permission is not available.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'ACCESS_DENIED'
+            message: 'Expected permission or scope is not present.'
+
+    ServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'INTERNAL_ERROR'
+            message: 'An internal server error occurred.'
+
+  securitySchemes:
+    bearerToken:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
+      description: "Authentication for user-facing endpoints. Uses bearer token in API prefix."
+    authToken:
+      type: "apiKey"
+      name: "x-auth-token"
+      in: "header"
+      description: "Auth Token header for inter-service communication"
