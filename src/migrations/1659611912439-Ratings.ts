@@ -45,7 +45,7 @@ export class Ratings1659611912439 implements MigrationInterface {
     await queryRunner.createTable(this.userTable, true);
 
     await queryRunner.createForeignKey(
-      "enrollment",
+      "rating",
       new TableForeignKey({
         columnNames: ["enrollment_id"],
         referencedColumnNames: ["id"],

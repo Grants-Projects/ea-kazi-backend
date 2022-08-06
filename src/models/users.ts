@@ -5,23 +5,26 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
+  Index,
 } from 'typeorm'
 
 @Entity('user')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id!: string
+  id: string
 
-  @Column()
-  firstname!: string
+  @Column({default: null})
+  first_name!: string
 
-  @Column()
-  lastname!: string
+  @Column({default: null})
+  last_name!: string
 
-  @Column()
-  email!: string
+  @Index('email_index')
+  @Column({
+    unique: true,
+  })  email: string
 
-  @Column()
+  @Column({default: null})
   bio!: string
   
   // @Column({
@@ -34,16 +37,16 @@ export class User extends BaseEntity {
   @CreateDateColumn({
     type: 'timestamp',
   })
-  verifiedAt!: Date
+  verified_at!: Date
 
   @CreateDateColumn({
     type: 'timestamp',
   })
-  createdAt!: Date
+  created_at!: Date
 
   @UpdateDateColumn({
     type: 'timestamp',
   })
-  updatedAt!: Date
+  updated_at!: Date
 
 }
