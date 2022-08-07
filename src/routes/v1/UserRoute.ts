@@ -1,6 +1,5 @@
 import express, {Router, Application } from "express";
 const router:Router = express.Router();
-//import container from "../config/app";
 import {container} from "tsyringe";
 import {UserController} from "../../controller/UserController"
 const userController: any = container.resolve(UserController)
