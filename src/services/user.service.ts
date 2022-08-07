@@ -1,10 +1,8 @@
 /** @format */
 
 import { User } from "../models";
-import { AppDataSource } from "../utils/data-source";
-import { UserRepository } from "../reprository/user.repository";
+import { UserRepository } from "../repository/user.repository";
 import { injectable } from "tsyringe";
-// import { IRequest, IResponse } from "../common/http.interface";
 
 @injectable()
 export class UserService {
