@@ -5,8 +5,10 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
+  BeforeInsert,
   Index,
 } from 'typeorm'
+import * as argon2 from 'argon2';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -26,13 +28,18 @@ export class User extends BaseEntity {
 
   @Column({default: null})
   bio!: string
+
+  @Column()
+  password: string;
   
-  // @Column({
-  //   type: 'enum',
-  //   enum: ['VERIFIED', 'BLOCKED', 'NOT_VERIFIED'],
-  //   default: 'NOT_VERIFIED',
-  // })
-  // status!: string
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await argon2.hash(this.password);
+  }
+
+  comparePassword = function (password: string): Promise<boolean> {
+    return argon2.verify(this.password, password);
+  };
 
   @CreateDateColumn({
     type: 'timestamp',

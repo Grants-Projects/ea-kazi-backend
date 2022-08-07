@@ -54,14 +54,20 @@ export function forbidden(
   data = null,
   message: string = ResponseMessages.FORBIDDEN
 ) {
-  this.status(StatusCodes.FORBIDDEN).json("forbidden");
+  this.status(StatusCodes.FORBIDDEN).json({
+    status: StatusCodes.FORBIDDEN,
+    message: message
+  });
 }
 
 export function notFound(
   data = null,
   message: string = ResponseMessages.NOT_FOUND
 ) {
-  this.status(StatusCodes.NOT_FOUND).json("notFound");
+  this.status(StatusCodes.NOT_FOUND).json({
+    status: StatusCodes.NOT_FOUND,
+    message: message
+  });
 }
 
 export function serverError(
