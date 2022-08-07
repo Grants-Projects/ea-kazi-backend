@@ -16,17 +16,15 @@ export class User1659482181387 implements MigrationInterface {
       {
         name: "first_name",
         type: "varchar",
-        default: null,
       },
       {
         name: "last_name",
         type: "varchar",
-        default: null,
       },
       {
         name: "bio",
         type: "varchar",
-        default: null,
+        isNullable: true,
       },
       {
         name: "status",
@@ -36,12 +34,11 @@ export class User1659482181387 implements MigrationInterface {
       {
         name: "email",
         type: "varchar",
-        default: null,
       },
       {
         name: "verified_at",
         type: "timestamp",
-        default: null,
+        isNullable: true,
       },
       {
         name: "created_at",
