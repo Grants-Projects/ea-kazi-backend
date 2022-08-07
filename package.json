@@ -8,7 +8,9 @@
     "dev": "nodemon src/index.ts",
     "start": "tsc && node .dist/index.js",
     "migrate": "yarn typeorm migration:generate ./src/migrations/added-user-entity -d ./src/utils/data-source.ts",
-    "db:push": "yarn typeorm migration:run -d src/utils/data-source.ts"
+    "db:push": "yarn typeorm migration:run -d src/utils/data-source.ts",
+    "docker:build": "docker-compose build",
+    "docker:bash": "docker-compose up"
   },
   "repository": {
     "type": "git",
@@ -22,11 +24,15 @@
   "homepage": "https://github.com/Near-Grants-Projects/ea-kazi-backend#readme",
   "dependencies": {
     "@types/cors": "^2.8.12",
+    "@types/ioredis": "^4.28.8",
+    "@types/jsonwebtoken": "^8.5.8",
     "argon2": "^0.28.7",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.7",
     "cors": "^2.8.5",
     "express": "^4.18.1",
+    "ioredis": "^4.28.5",
+    "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "redoc-cli": "^0.13.17",
     "tsyringe": "^4.7.0",
