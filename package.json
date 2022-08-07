@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Near-Grants-Projects/ea-kazi-backend#readme",
   "dependencies": {
     "@types/cors": "^2.8.12",
+    "argon2": "^0.28.7",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.7",
     "cors": "^2.8.5",
