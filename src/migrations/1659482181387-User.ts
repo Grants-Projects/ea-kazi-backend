@@ -27,6 +27,11 @@ export class User1659482181387 implements MigrationInterface {
         isNullable: true,
       },
       {
+        name: "password",
+        type: "varchar",
+        isNullable: false,
+      },
+      {
         name: "status",
         type: "enum",
         enum: ["VERIFIED", "BLOCKED", "NOT_VERIFIED"],

@@ -13,11 +13,10 @@ export class UserController {
       const { email, password } = req.body;
     const user = await this.userService.findUserByEmail({ email });
 
-    // 1. Check if user exist
     if (user) {
-      return res.notFound( user, 'Account aleary exist please login');
+      return res.forbidden( user, 'Account already exist please login');
     }
-      const data = await this.userService.createPostHandler(req.body);
+      const data = await this.userService.createUser(req.body);
       return res.ok(data, 'Registration Successful');
     } catch (error) {
       return res.forbidden(
