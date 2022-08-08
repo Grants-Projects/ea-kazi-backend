@@ -6,7 +6,7 @@
 #  to create migration file 
 
 ```
-typeorm migration:create ./src/migrations/UserRoleg 
+typeorm migration:create ./src/database/migrations/job
 ```
 
 
