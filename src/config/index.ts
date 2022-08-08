@@ -9,6 +9,7 @@ export const config = {
     header_name: process.env.HEADER_NAME || 'eakazi-auth-token',
     jwt_secret: process.env.JWT_SECRET || "myKXAXZXI902@@#@50381.C03",
     jwt_duration: process.env.JWT_DURATION || '1h',
+    jwt_email_duration: process.env.JWT_EMAIL_DURATION || '10m',
     jwt_activation: process.env.JWT_ACCOUNT_ACTIVATION,
     accessTokenExpiresIn: 15,
     refreshTokenExpiresIn: 60,

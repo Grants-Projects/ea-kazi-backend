@@ -5,6 +5,6 @@ export type IEmail = {
   template_name: string;
   recipient_email: string;
   short_response_message: string;
-  email_data1: string;
-  email_data2?: string;
+  action_url: string;
+  email_data?: string;
 };

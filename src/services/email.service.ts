@@ -19,16 +19,16 @@ export class EmailService {
     template_name: string,
     recipient_email: string,
     short_response_message: string,
-    email_data1: string,
-    email_data2?: string
+    action_url: string,
+    email_data?: string
   ) => {
     try {
       const template = await ejs.renderFile(
         path.join(__dirname, `../templates/${template_name}.ejs`),
         {
           email: recipient_email,
-          email_data1,
-          email_data2
+          action_url,
+          email_data
         }
       );
 

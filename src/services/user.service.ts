@@ -81,7 +81,7 @@ export class UserService {
       const token = jwt.sign(
         { id: user.id, email: user.email },
         config.web.jwt_activation,
-        { expiresIn: "10m" }
+        { expiresIn: config.web.jwt_email_duration }
       );
 
       const emailData: IEmail = {
@@ -90,7 +90,7 @@ export class UserService {
         recipient_email: user.email,
         short_response_message:
           "verify your password. The link will expire in 10 minutes",
-        email_data1: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
+        action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
       };
 
       await this.emailService.sendEmail(
@@ -99,7 +99,7 @@ export class UserService {
         emailData.template_name,
         emailData.recipient_email,
         emailData.short_response_message,
-        emailData.email_data1
+        emailData.action_url
       );
     } catch (error) {
       return res.forbidden(
@@ -153,7 +153,7 @@ export class UserService {
       const token = jwt.sign(
         { id: user.id, email: user.email },
         config.web.jwt_activation,
-        { expiresIn: "10m" }
+        { expiresIn: config.web.jwt_email_duration }
       );
 
       const emailData: IEmail = {
@@ -162,7 +162,7 @@ export class UserService {
         recipient_email: user.email,
         short_response_message:
           "verify your password again :) . The link will expire in 10 minutes",
-        email_data1: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
+        action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
       };
 
       await this.emailService.sendEmail(
@@ -171,7 +171,7 @@ export class UserService {
         emailData.template_name,
         emailData.recipient_email,
         emailData.short_response_message,
-        emailData.email_data1
+        emailData.action_url
       );
     } catch (err) {
       return res.forbidden(
