@@ -14,11 +14,16 @@ export class UserRepository {
     return await userRepository.save(userRepository.create(input));
   };
 
-  findUserByEmail = async ({ email }: { email: string }): Promise<User> => {
-    return await userRepository.findOneBy({ email });
+  saveUser = async (input: Partial<User>) => {
+    console.log({input})
+    return await userRepository.save(input);
   };
 
-  findUserById = async ( id : { id: string }): Promise<User> => {
-    return await userRepository.findOneBy(id);
+  findUserByEmail = async (email: string): Promise<User> => {
+    return await userRepository.findOne({ where: { email } });
+  };
+
+  findUserById = async ( id : string): Promise<User> => {
+    return await userRepository.findOne({ where: { id }})
   };
 }
