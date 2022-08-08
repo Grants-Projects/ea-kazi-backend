@@ -10,6 +10,12 @@ import {config} from '../config';
 import { RedisCache } from "../lib/redis-cache";
 import { signJwt } from "../utils/jwt";
 import { LoggerHelper } from "../helper/logger";
+import { IRequest, IResponse } from "../common/http.interface";
+import sgMail from '@sendgrid/mail';
+import * as path from 'path';
+import * as ejs from 'ejs';
+import * as jwt from 'jsonwebtoken';
+sgMail.setApiKey(config.sendgrid.sendgrid_api_key);
 
 
 @injectable()
@@ -38,14 +44,6 @@ export class UserService {
     maxAge: config.web.refreshTokenExpiresIn * 60 * 1000,
   };
 
-  createUser = async (input: Partial<User>) => {
-    return await this.userRepository.createUser(input);
-  };
-
-  findUserByEmail = async (email : string) => {
-    return await this.userRepository.findUserByEmail({ email });
-  };
-
   signTokens = async (user: User) => {
     // 1. Create Session
     this.redisClient.set(user.id, user, config.redis.ttl)
@@ -61,5 +59,107 @@ export class UserService {
     this.logger.log({access_token, refresh_token})
 
     return { access_token, refresh_token };
+  };
+
+  createUser = async (req: IRequest, res: IResponse) => {
+    try {
+      const { email } = req.body;
+      const userExist = await this.userRepository.findUserByEmail(email);
+
+      if (userExist) {
+        return res.forbidden(userExist, "Account already exist please login");
+      }
+      const user = await this.userRepository.createUser(req.body);
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        config.web.jwt_activation,
+        { expiresIn: "10m" }
+      );
+
+      const template = await ejs.renderFile(
+        path.join(__dirname, '../templates/sign_verify.ejs'),
+        {
+          email: user.email,
+          token: `${config.sendgrid.client_url}/verify-account/?token=${token}`
+        }
+      );
+
+      const emailData = {
+        from: config.sendgrid.email_from,
+        to: email,
+        subject: `Account Verification`,
+        html: template,
+      };
+
+      const send = await sgMail.send(emailData);
+      if (!send) {
+        return res.serverError(send, 'Unable to verification email at this time. Please try again later')
+      } else {
+      return res.ok(null, `An Email has been sent to ${user?.email}. Please follow the instructions to verify your password`);
+      }
+    } catch (error) {
+      return res.forbidden(
+        error,
+        error.message || "An error occured while creating account"
+      );
+    }
+  };
+
+  loginUser = async (req: IRequest, res: IResponse) => {
+    try {
+      const { email, password } = req.body;
+      const user = await this.userRepository.findUserByEmail(email);
+
+      // 1. Check if user exist
+      if (!user) {
+        return res.notFound(null, "Invalid email or password");
+      }
+
+      // 2.Check if user is verified
+      if (!user.verified_at) {
+        return res.badGateway(
+          null,
+          "You are not verified, check your email to verify your account"
+        );
+      }
+
+      //3. Check if password is valid
+      if (!(await User.comparePasswords(password, user.password))) {
+        return res.notFound(null, "Invalid email or password");
+      }
+
+      // 4. Sign Access and Refresh Tokens
+      const { access_token, refresh_token } = await this.signTokens(
+        user
+      );
+      // // 5. Add Cookies
+      res.cookie(
+        "access_token",
+        access_token,
+        this.accessTokenCookieOptions
+      );
+      res.cookie(
+        "refresh_token",
+        refresh_token,
+        this.refreshTokenCookieOptions
+      );
+      res.cookie("logged_in", true, {
+        ...this.accessTokenCookieOptions,
+        httpOnly: false,
+      });
+
+      // 6. Send response
+      const data = {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        bio: user.bio,
+        token: access_token,
+      };
+      return res.ok(data, "Login Succcess");
+    } catch (err) {
+      return res.serverError(err, "Invalid email or password");
+    }
   };
 }
