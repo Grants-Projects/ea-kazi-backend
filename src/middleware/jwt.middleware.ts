@@ -1,8 +1,10 @@
 import passportJwt from 'passport-jwt';
 import { config } from '../config';
+import { LoggerHelper } from '../helper/logger';
 import ResponseMessages from '../lib/response-messages';
 import { UserRepository } from '../repository/user.repository';
-
+import { container } from 'tsyringe';
+const logger: any = container.resolve(LoggerHelper);
 /**
  * passport-jwt - A Passport strategy for authenticating with a JSON Web Token.
  * This module lets you authenticate endpoints using a JSON web token.
@@ -28,7 +30,7 @@ export default (passport: any) => {
           return done(null, false);
         })
         .catch((err: any) => {
-          console.log(err)
+          logger.log(err)
           return done(err, false, { message: ResponseMessages.FORBIDDEN });
         });
     })

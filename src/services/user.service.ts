@@ -9,10 +9,12 @@ import { injectable } from "tsyringe";
 import {config} from '../config';
 import { RedisCache } from "../lib/redis-cache";
 import { signJwt } from "../utils/jwt";
+import { LoggerHelper } from "../helper/logger";
+
 
 @injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository, private redisClient: RedisCache) {}
+  constructor(private userRepository: UserRepository, private redisClient: RedisCache, private logger: LoggerHelper) {}
 
   cookiesOptions: CookieOptions = {
     httpOnly: true,
@@ -56,7 +58,7 @@ export class UserService {
     const refresh_token = signJwt({ sub: user.id }, {
       expiresIn: `${config.web.refreshTokenExpiresIn}m`,
     });
-    console.log({access_token, refresh_token})
+    this.logger.log({access_token, refresh_token})
 
     return { access_token, refresh_token };
   };

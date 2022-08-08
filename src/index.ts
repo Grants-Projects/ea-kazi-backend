@@ -9,6 +9,9 @@ import response from './lib/response';
 import passport from 'passport';
 import jwtMiddleware from "./middleware/jwt.middleware";
 import cors from "cors";
+import { container } from 'tsyringe';
+import { LoggerHelper } from "./helper/logger";
+const logger: any = container.resolve(LoggerHelper);
 
 class Server {
   private app: Application;
@@ -40,14 +43,14 @@ class Server {
     const PORT: any = config.web.port;
     this.configuration();
     this.app.listen(PORT, () => {
-      console.log(`Server is listening on port ${PORT}.`);
+      logger.log(`Server is listening on port ${PORT}.`);
     });
   }
 }
 const server = new Server();
 server.start();
 process.on("SIGINT", function () {
-  console.log("\nGracefully shutting down from SIGINT (Ctrl-C)");
+  logger.log("\nGracefully shutting down from SIGINT (Ctrl-C)");
   // some other closing procedures go here
   process.exit(1);
 });
