@@ -46,16 +46,14 @@ export class UserService {
 
   signTokens = async (user: User) => {
     // 1. Create Session
-    await this.redisClient.set(user.id, user, config.redis.ttl)
+    this.redisClient.set(user.id, user, config.redis.ttl)
   
     // 2. Create Access and Refresh tokens
-    console.log('here')
-    const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
+    const access_token = signJwt({ sub: user.id }, {
       expiresIn: `${config.web.accessTokenExpiresIn}m`,
     });
 
-  
-    const refresh_token = signJwt({ sub: user.id }, 'refreshTokenPrivateKey', {
+    const refresh_token = signJwt({ sub: user.id }, {
       expiresIn: `${config.web.refreshTokenExpiresIn}m`,
     });
     console.log({access_token, refresh_token})

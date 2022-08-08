@@ -6,8 +6,10 @@ import { config } from "./config";
 import { AppDataSource } from "../src/utils/data-source";
 import Routes from "../src/routes";
 import response from './lib/response';
-
+import passport from 'passport';
+import jwtMiddleware from "./middleware/jwt.middleware";
 import cors from "cors";
+
 class Server {
   private app: Application;
   constructor() {
@@ -18,6 +20,12 @@ class Server {
     this.app.use(response);
     this.app.use(cors());
     this.app.use(express.json());
+
+    // Initialize passport middleware
+    this.app.use(passport.initialize());
+    jwtMiddleware(passport);
+
+
     this.app.get("/", (req, res) => {
       res.status(200).json("starting...");
     });

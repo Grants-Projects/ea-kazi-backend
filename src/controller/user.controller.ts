@@ -85,4 +85,9 @@ export class UserController {
       return res.serverError(err, "Invalid email or password");
     }
   };
+
+  secureurl =  async (req: IRequest, res: IResponse) => {
+    console.log({userreq: req.user})
+    // await this.userService.secureurl(req, res)
+  }
 }
