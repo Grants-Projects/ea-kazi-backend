@@ -2,12 +2,13 @@
 
 import { injectable } from "tsyringe";
 import { IRequest, IResponse } from "../common/http.interface";
+import { LoggerHelper } from "../helper/logger";
 import { User } from "../models";
 import { UserService } from "../services/user.service";
 
 @injectable()
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private logger: LoggerHelper) {}
   registerUser = async (req: IRequest, res: IResponse) => {
     try {
       const { email } = req.body;
@@ -85,4 +86,9 @@ export class UserController {
       return res.serverError(err, "Invalid email or password");
     }
   };
+
+  secureurl =  async (req: IRequest, res: IResponse) => {
+    this.logger.log({userreq: req.user})
+    // await this.userService.secureurl(req, res)
+  }
 }
