@@ -1,7 +1,6 @@
 /** @format */
 
 import { User } from "../models";
-import { AppDataSource } from "../utils/data-source";
 import { CookieOptions } from "express";
 import { UserRepository } from "../repository/user.repository";
 import { injectable } from "tsyringe";
@@ -12,8 +11,6 @@ import { signJwt } from "../utils/jwt";
 import { LoggerHelper } from "../helper/logger";
 import { IRequest, IResponse } from "../common/http.interface";
 import sgMail from "@sendgrid/mail";
-import * as path from "path";
-import * as ejs from "ejs";
 import * as jwt from "jsonwebtoken";
 import { EmailService } from "./email.service";
 import { IEmail } from "../common/types/email";
@@ -84,7 +81,7 @@ export class UserService {
       const token = jwt.sign(
         { id: user.id, email: user.email },
         config.web.jwt_activation,
-        { expiresIn: "1h" }
+        { expiresIn: "10m" }
       );
 
       const emailData: IEmail = {
@@ -156,7 +153,7 @@ export class UserService {
       const token = jwt.sign(
         { id: user.id, email: user.email },
         config.web.jwt_activation,
-        { expiresIn: "1h" }
+        { expiresIn: "10m" }
       );
 
       const emailData: IEmail = {
