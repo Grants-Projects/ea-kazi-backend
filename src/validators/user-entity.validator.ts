@@ -65,6 +65,28 @@ class UserEntityValidator {
       },
     })
   )
+
+  accountActivation = validate(
+    checkSchema({
+      token: {
+        in: ['query'],
+        isString: {
+          errorMessage: 'token must be a string',
+        },
+      },
+    })
+  )
+
+  resendAccountActivationEmail = validate(
+    checkSchema({
+      email: {
+        in: ['body'],
+        isEmail: {
+          errorMessage: 'Input a valid email',
+        },
+      },
+    })
+  )
 }
 
 export default UserEntityValidator;

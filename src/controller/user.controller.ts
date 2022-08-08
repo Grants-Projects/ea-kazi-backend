@@ -21,4 +21,12 @@ export class UserController {
   secureurl = async (req: IRequest, res: IResponse) => {
     this.logger.log({ userreq: req.user });
   };
+
+  accountActivation = async (req: IRequest, res: IResponse) => {
+    await this.userService.accountActivation(req, res);
+  };
+
+  resendAccountActivationEmail = async (req: IRequest, res: IResponse) => {
+    await this.userService.resendAccountActivationEmail(req, res);
+  };
 }
