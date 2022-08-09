@@ -1,9 +1,9 @@
 import express, {Router } from "express";
 const router:Router = express.Router();
 import {container} from "tsyringe";
-import { CourseController } from "../../controller/CourseController";
+import { CourseController } from "../../controller/course.controller";
 const courseController: any = container.resolve(CourseController)
 
-router.post('/', courseController.getAllCourses)
+router.get('/', courseController.getAllCourses)
 
 export default router;
