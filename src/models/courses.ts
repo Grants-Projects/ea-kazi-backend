@@ -8,7 +8,7 @@ import {
   } from 'typeorm'
   
   @Entity('course')
- export class Courses extends BaseEntity {
+ export class Course extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string
 
