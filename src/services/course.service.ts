@@ -9,9 +9,8 @@ import { IRequest, IResponse } from '../common/http.interface';
 export class CourseService {
 	constructor(private courseRepository: CourseRepository) {}
 
-	getAllCourses = async (): Promise<Course[]> => {
-		console.log('hehee');
-		return await this.courseRepository.getAllCourses();
+	getAllCourses = async (query): Promise<Course[]> => {
+		return await this.courseRepository.getAllCourses(query);
 	};
 
 	createCourse = async (req: IRequest, res: IResponse): Promise<Course> => {

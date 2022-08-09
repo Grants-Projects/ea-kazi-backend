@@ -8,8 +8,21 @@ const courseRepository = AppDataSource.getRepository(Course);
 
 @injectable()
 export class CourseRepository {
-	getAllCourses = async (): Promise<Course[]> => {
-		console.log('here we go');
+	getAllCourses = async (query): Promise<Course[]> => {
+		if (
+			query &&
+			Object.keys(query).length &&
+			(query.published === 'true' || query.published === 'false')
+		) {
+			let condition = query.published;
+			condition === 'true' ? (condition = true) : (condition = false);
+			return await courseRepository.find({
+				where: {
+					is_published: condition,
+				},
+			});
+		}
+
 		return await courseRepository.find();
 	};
 

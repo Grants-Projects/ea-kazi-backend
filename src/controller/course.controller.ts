@@ -10,7 +10,7 @@ export class CourseController {
 
 	getAllCourses = async (req: IRequest, res: IResponse) => {
 		try {
-			const courses = await this.courseService.getAllCourses();
+			const courses = await this.courseService.getAllCourses(req.query);
 
 			return res.ok(courses, 'Courses fetched successfully');
 		} catch (error) {
