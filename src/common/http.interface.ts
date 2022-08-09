@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 export interface IRequest extends Request {
     user: any;
     body: any;
+    cookie: any
 }
 
 export interface IResponse extends Response {
