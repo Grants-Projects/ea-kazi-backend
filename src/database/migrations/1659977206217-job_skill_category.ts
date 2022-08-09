@@ -20,7 +20,12 @@ export class jobSkillCategory1659977206217 implements MigrationInterface {
           generationStrategy: "uuid",
         },
         {
-          name: "user_id",
+          name: "job_id",
+          type: "uuid",
+          default: null,
+        },
+        {
+          name: "skill_id",
           type: "uuid",
           default: null,
         },
@@ -42,9 +47,17 @@ export class jobSkillCategory1659977206217 implements MigrationInterface {
     await queryRunner.createForeignKey(
       "job_skill_category",
       new TableForeignKey({
-        columnNames: ["user_id"],
+        columnNames: ["job_id"],
         referencedColumnNames: ["id"],
-        referencedTableName: "user",
+        referencedTableName: "job",
+      })
+    );
+    await queryRunner.createForeignKey(
+      "job_skill_category",
+      new TableForeignKey({
+        columnNames: ["skill_id"],
+        referencedColumnNames: ["id"],
+        referencedTableName: "skill_category",
       })
     );
   }

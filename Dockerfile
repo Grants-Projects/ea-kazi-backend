@@ -9,8 +9,7 @@ COPY package.json .
 # Install node dependencies
 RUN yarn
 
-RUN yarn global add typescript && yarn global add ts-node && yarn global add nodemon && yarn add argon2
-
+RUN yarn global add typescript && yarn global add ts-node && yarn global add nodemon
 # add app to root directory
 COPY . .
 

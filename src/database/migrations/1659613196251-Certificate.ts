@@ -23,7 +23,7 @@ export class Certificate1659613196251 implements MigrationInterface {
                     default: null,
                 },
                 {
-                    name: 'token',
+                    name: 'token_id',
                     type: 'varchar',
                     default: null,
                 },

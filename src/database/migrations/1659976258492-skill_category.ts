@@ -27,21 +27,25 @@ export class skillCategory1659976258492 implements MigrationInterface {
         {
           name: "description",
           type: "longtext",
+          isNullable: true,
           default: null,
         },
         {
           name: "thumbnail_image",
           type: "varchar",
+          isNullable: true,
           default: null,
         },
         {
           name: "image",
           type: "varchar",
+          isNullable: true,
           default: null,
         },
         {
           name: "position",
           type: "integer",
+          isNullable: true,
           default: null,
         },
         {

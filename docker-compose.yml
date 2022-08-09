@@ -1,5 +1,20 @@
 version: '3'
 services:
+
+  database:
+    container_name: ea_kazi_database
+    image: mysql:8.0.30
+    restart: always
+    ports:
+      - "3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: "ea_kazi_user"
+      MYSQL_PASSWORD: "ea_kazi_pass"
+      MYSQL_DATABASE: "ea_kazi"
+    networks:
+      - main_network
+      
   app:
     container_name: ea_kazi_web_app
     image: ea_kazi_web_app
@@ -13,7 +28,7 @@ services:
       - /app/node_modules
       - .:/app
     stdin_open: true
-
+    
   redis:
     container_name: ea_kazi_redis
     image: redis

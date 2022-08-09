@@ -21,9 +21,8 @@ export class User1659482181387 implements MigrationInterface {
                     type: 'varchar',
                 },
                 {
-                    name: 'bio',
+                    name: 'email',
                     type: 'varchar',
-                    isNullable: true,
                 },
                 {
                     name: 'password',
@@ -33,10 +32,6 @@ export class User1659482181387 implements MigrationInterface {
                     name: 'status',
                     type: 'enum',
                     enum: ['VERIFIED', 'BLOCKED', 'NOT_VERIFIED'],
-                },
-                {
-                    name: 'email',
-                    type: 'varchar',
                 },
                 {
                     name: 'verified_at',

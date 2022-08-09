@@ -1,7 +1,5 @@
 /** @format */
 
-import config from "config";
-import { omit } from "lodash";
 import { injectable } from "tsyringe";
 import { User } from "../models";
 import { AppDataSource } from "../utils/data-source";

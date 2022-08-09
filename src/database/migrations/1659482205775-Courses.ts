@@ -18,13 +18,28 @@ export class Courses1659482205775 implements MigrationInterface {
                     generationStrategy: 'uuid',
                 },
                 {
-                    name: 'owner_id',
+                    name: 'author_id',
                     type: 'uuid',
                     default: null,
                 },
                 {
-                    name: 'name',
+                    name: 'state',
                     type: 'varchar',
+                    default: null,
+                },
+                {
+                    name: 'status',
+                    type: 'varchar',
+                    default: null,
+                },
+                {
+                    name: 'title',
+                    type: 'varchar',
+                    default: null,
+                },
+                {
+                    name: 'description',
+                    type: 'longtext',
                     default: null,
                 },
                 {
@@ -33,8 +48,18 @@ export class Courses1659482205775 implements MigrationInterface {
                     default: null,
                 },
                 {
+                    name: 'published_by',
+                    type: 'uuid',
+                    default: null,
+                },
+                {
                     name: 'approved_by',
-                    type: 'varchar',
+                    type: 'uuid',
+                    default: null,
+                },
+                {
+                    name: 'published_at',
+                    type: 'timestamp',
                     default: null,
                 },
                 {
@@ -60,7 +85,25 @@ export class Courses1659482205775 implements MigrationInterface {
         await queryRunner.createForeignKey(
             'course',
             new TableForeignKey({
-                columnNames: ['owner_id'],
+                columnNames: ['author_id'],
+                referencedColumnNames: ['id'],
+                referencedTableName: 'user',
+            })
+        );
+
+        await queryRunner.createForeignKey(
+            'course',
+            new TableForeignKey({
+                columnNames: ['published_by'],
+                referencedColumnNames: ['id'],
+                referencedTableName: 'user',
+            })
+        );
+
+        await queryRunner.createForeignKey(
+            'course',
+            new TableForeignKey({
+                columnNames: ['approved_by'],
                 referencedColumnNames: ['id'],
                 referencedTableName: 'user',
             })

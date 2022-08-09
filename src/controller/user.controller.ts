@@ -33,4 +33,8 @@ export class UserController {
   refreshAccessTokenHandler = async (req: IRequest, res: IResponse) => {
     await this.userService.refreshAccessTokenHandler(req, res);
   };
+
+  logoutHandler = async (req: IRequest, res: IResponse) => {
+    await this.userService.logoutHandler(req, res);
+  };
 }
