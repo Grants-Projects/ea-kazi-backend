@@ -11,4 +11,8 @@ export class CourseRepository {
 	getAllCourses = async (): Promise<Course[]> => {
 		return await courseRepository.find();
 	};
+
+	createCourse = async (input: Partial<Course>) => {
+		return await courseRepository.save(courseRepository.create(input));
+	};
 }

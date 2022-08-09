@@ -14,9 +14,21 @@ export class CourseController {
 
 			return res.ok(courses, 'Courses fetched successfully');
 		} catch (error) {
-			return res.forbidden(
+			return res.serverError(
 				error,
 				error.message || 'An error occured while fetching courses'
+			);
+		}
+	};
+
+	createCourse = async (req: IRequest, res: IResponse) => {
+		try {
+			const course = await this.courseService.createCourse(req, res);
+			return res.ok(course, 'Course created successfully');
+		} catch (error) {
+			return res.serverError(
+				error,
+				error.message || 'An error occured while creating course'
 			);
 		}
 	};
