@@ -31,6 +31,7 @@ export class Courses1659482205775 implements MigrationInterface {
                     name: 'metadata',
                     type: 'varchar',
                     default: null,
+                    isNullable: true
                 },
                 {
                     name: 'approved_by',

@@ -10,6 +10,7 @@ export class CourseService {
 	constructor(private courseRepository: CourseRepository) {}
 
 	getAllCourses = async (): Promise<Course[]> => {
+		console.log('hehee');
 		return await this.courseRepository.getAllCourses();
 	};
 

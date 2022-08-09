@@ -9,10 +9,11 @@ const courseRepository = AppDataSource.getRepository(Course);
 @injectable()
 export class CourseRepository {
 	getAllCourses = async (): Promise<Course[]> => {
+		console.log('here we go');
 		return await courseRepository.find();
 	};
 
-	createCourse = async (input: Partial<Course>) => {
-		return await courseRepository.save(courseRepository.create(input));
+	createCourse = async (course: Partial<Course>) => {
+		return await courseRepository.save(courseRepository.create(course));
 	};
 }

@@ -22,20 +22,20 @@ import {
     metadata!: string
   
     @Column()
-    approvedBy!: string
+    approved_by!: string
   
     @CreateDateColumn({
         type: 'timestamp',
     })
-    approvedAt!: Date
+    approved_at!: Date
     
     @CreateDateColumn({
       type: 'timestamp',
     })
-    createdAt!: Date
+    created_at!: Date
   
     @UpdateDateColumn({
       type: 'timestamp',
     })
-    updatedAt!: Date
+    updated_at!: Date
   }
