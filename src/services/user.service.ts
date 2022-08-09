@@ -95,7 +95,6 @@ export class UserService {
       );
 
       if (!user) {
-        console.log('here 1')
         return res.forbidden(null, message);
       }
 
@@ -126,7 +125,6 @@ export class UserService {
   createUser = async (req: IRequest, res: IResponse) => {
     try {
       const { email } = req.body;
-      console.log(email);
       const userExist = await this.userRepository.findUserByEmail(email);
 
       if (userExist) {
@@ -166,7 +164,6 @@ export class UserService {
 
   accountActivation = async (req: IRequest, res: IResponse) => {
     const { token }: any = req.query;
-    console.log({ token });
     if (token) {
       jwt.verify(token, config.web.jwt_activation, async (err, decoded) => {
         if (err) {
