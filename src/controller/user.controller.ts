@@ -29,4 +29,8 @@ export class UserController {
   resendAccountActivationEmail = async (req: IRequest, res: IResponse) => {
     await this.userService.resendAccountActivationEmail(req, res);
   };
+
+  refreshAccessTokenHandler = async (req: IRequest, res: IResponse) => {
+    await this.userService.refreshAccessTokenHandler(req, res);
+  };
 }

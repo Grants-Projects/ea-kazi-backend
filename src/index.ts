@@ -11,6 +11,8 @@ import jwtMiddleware from "./middleware/jwt.middleware";
 import cors from "cors";
 import { container } from 'tsyringe';
 import { LoggerHelper } from "./helper/logger";
+import cookieParser from 'cookie-parser';
+
 const logger: any = container.resolve(LoggerHelper);
 
 class Server {
@@ -21,6 +23,7 @@ class Server {
 
   public configuration() {
     this.app.use(response);
+    this.app.use(cookieParser());
     this.app.use(cors());
     this.app.use(express.json());
 

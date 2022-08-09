@@ -12,6 +12,7 @@ router.post('/login', authValidator.loginUserEntity, userController.loginUser)
 router.put('/verify-account', authValidator.accountActivation, userController.accountActivation)
 router.post('/resend-verify', authValidator.resendAccountActivationEmail, userController.resendAccountActivationEmail)
 
+router.get('/refresh', userController.refreshAccessTokenHandler);
 router.get('/secureurl', authMiddleware, userController.secureurl)
 
 export default router;

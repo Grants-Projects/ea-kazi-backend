@@ -12,11 +12,10 @@ export const signJwt = (
 
 export const verifyJwt = <T>(
   token: string,
-  keyName: 'accessTokenPublicKey' | 'refreshTokenPublicKey'
 ): T | null => {
   try {
     const decoded = jwt.verify(token, config.web.jwt_secret) as T;
-
+    
     return decoded;
   } catch (error) {
     return null;

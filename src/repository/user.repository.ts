@@ -15,7 +15,6 @@ export class UserRepository {
   };
 
   saveUser = async (input: Partial<User>) => {
-    console.log({input})
     return await userRepository.save(input);
   };
 

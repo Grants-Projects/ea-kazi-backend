@@ -4,17 +4,14 @@ import { User } from "../models";
 import { CookieOptions } from "express";
 import { UserRepository } from "../repository/user.repository";
 import { injectable } from "tsyringe";
-// import { IRequest, IResponse } from "../common/http.interface";
 import { config } from "../config";
 import { RedisCache } from "../lib/redis-cache";
-import { signJwt } from "../utils/jwt";
+import { signJwt, verifyJwt } from "../utils/jwt";
 import { LoggerHelper } from "../helper/logger";
 import { IRequest, IResponse } from "../common/http.interface";
-import sgMail from "@sendgrid/mail";
 import * as jwt from "jsonwebtoken";
 import { EmailService } from "./email.service";
 import { IEmail } from "../common/types/email";
-sgMail.setApiKey(config.sendgrid.sendgrid_api_key);
 
 @injectable()
 export class UserService {
@@ -68,10 +65,66 @@ export class UserService {
     return { access_token, refresh_token };
   };
 
+  refreshAccessTokenHandler = async (req: IRequest, res: IResponse) => {
+    try {
+      const refresh_token = req.cookies.refresh_token;
+
+      const message = "Could not refresh access token";
+
+      if (!refresh_token) {
+        return res.forbidden(null, message);
+      }
+
+      // Validate refresh token
+      const decoded = verifyJwt<{ sub: string }>(refresh_token);
+
+      if (!decoded) {
+        return res.forbidden(null, message);
+      }
+
+      // Check if user has a valid session
+      const session = await this.redisClient.get(decoded.sub);
+
+      if (!session) {
+        return res.forbidden(null, message);
+      }
+
+      // Check if user still exist
+      const user = await this.userRepository.findUserById(
+        session?.id
+      );
+
+      if (!user) {
+        return res.forbidden(null, message);
+      }
+
+      // Sign new access token
+      const access_token = signJwt(
+        { sub: user.id },
+        {
+          expiresIn: `${config.web.accessTokenExpiresIn}m`,
+        }
+      );
+
+      // 4. Add Cookies
+      res.cookie("access_token", access_token, this.accessTokenCookieOptions);
+      res.cookie("logged_in", true, {
+        ...this.accessTokenCookieOptions,
+        httpOnly: false,
+      });
+
+      return res.ok({access_token}, "Access Token Refresh Success");
+    } catch (err) {
+      return res.serverError(
+        err,
+        err.message || "An server error occured while refreshing access token"
+      );
+    }
+  };
+
   createUser = async (req: IRequest, res: IResponse) => {
     try {
       const { email } = req.body;
-      console.log(email);
       const userExist = await this.userRepository.findUserByEmail(email);
 
       if (userExist) {
@@ -111,7 +164,6 @@ export class UserService {
 
   accountActivation = async (req: IRequest, res: IResponse) => {
     const { token }: any = req.query;
-    console.log({ token });
     if (token) {
       jwt.verify(token, config.web.jwt_activation, async (err, decoded) => {
         if (err) {
@@ -227,7 +279,7 @@ export class UserService {
         bio: user.bio,
         token: access_token,
       };
-      return res.ok(data, "Login Succcess");
+      return res.ok(data, "Login Success");
     } catch (err) {
       return res.serverError(err, "Invalid email or password");
     }
