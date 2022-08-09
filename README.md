@@ -8,3 +8,17 @@
 ```
 typeorm migration:create ./src/migrations/UserRoleg 
 ```
+
+
+#  to install 
+
+```
+brew install redis
+```
+
+#  to start redis
+
+
+```
+redis-server
+```

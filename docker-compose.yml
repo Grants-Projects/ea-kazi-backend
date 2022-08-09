@@ -1,0 +1,32 @@
+version: '3'
+services:
+  app:
+    container_name: ea_kazi_web_app
+    image: ea_kazi_web_app
+    build: .
+    networks:
+      - main_network
+    ports:
+      - "8082:8082"
+    volumes:
+      # - ${PWD}/app/node_modules
+      - /app/node_modules
+      - .:/app
+    stdin_open: true
+
+  redis:
+    container_name: ea_kazi_redis
+    image: redis
+    logging:
+      driver: none
+    ports:
+      - "6379"
+    networks:
+      - main_network
+volumes:
+  node_modules:
+
+
+networks:
+  main_network:
+    driver: bridge

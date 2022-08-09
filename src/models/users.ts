@@ -8,7 +8,7 @@ import {
   BeforeInsert,
   Index,
 } from 'typeorm'
-import * as argon2 from 'argon2';
+import bcrypt from 'bcryptjs';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -34,12 +34,19 @@ export class User extends BaseEntity {
   
   @BeforeInsert()
   async hashPassword() {
-    this.password = await argon2.hash(this.password);
+    this.password = await bcrypt.hash(this.password, 12);
   }
 
   comparePassword = function (password: string): Promise<boolean> {
-    return argon2.verify(this.password, password);
+    return bcrypt.compare(this.password, password);
   };
+
+  static async comparePasswords(
+    candidatePassword: string,
+    hashedPassword: string
+  ) {
+    return await bcrypt.compare(candidatePassword, hashedPassword);
+  }
 
   @CreateDateColumn({
     type: 'timestamp',
