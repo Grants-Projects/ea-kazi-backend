@@ -122,6 +122,30 @@ export class UserService {
     }
   };
 
+  logout = (res: IResponse) => {
+    res.cookie('access_token', '', { maxAge: 1 });
+    res.cookie('refresh_token', '', { maxAge: 1 });
+    res.cookie('logged_in', '', { maxAge: 1 });
+  };
+  
+  logoutHandler = async (
+    req: IRequest,
+    res: IResponse
+  ) => {
+    try {
+      const user = req.user;
+  
+      await this.redisClient.delete(user.id);
+      this.logout(res);
+  
+      res.status(200).json({
+        status: 'success',
+      });
+    } catch (err) {
+      return res.forbidden(err, "An unknown error occured while logging out");
+    }
+  };
+
   createUser = async (req: IRequest, res: IResponse) => {
     try {
       const { email } = req.body;

@@ -28,12 +28,12 @@ export class Enrollment1659611138194 implements MigrationInterface {
                     default: null,
                 },
                 {
-                    name: 'start_at',
+                    name: 'start_date',
                     type: 'timestamp',
                     default: null,
                 },
                 {
-                    name: 'end_at',
+                    name: 'end_date',
                     type: 'timestamp',
                     default: null,
                 },

@@ -12,11 +12,11 @@ import { User } from '../models';
 // }>('mysqlConfig');
 
 export const AppDataSource = new DataSource({
-    host: process.env.DB_SERVER || 'localhost',
-    port: Number(process.env.DB_PORT) || 3306,
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '12345678',
-    database: process.env.DB_NAME || 'ea_kazi',
+    host: process.env.MYSQL_HOST || 'localhost',
+    port: Number(process.env.MYSQL_PORT) || 3306,
+    username: process.env.MYSQL_USER || 'root',
+    password: process.env.MYSQL_PASSWORD || '12345678',
+    database: process.env.MYSQL_DATABASE || 'ea_kazi',
     synchronize: false,
     migrationsRun: true,
     type: 'mysql',

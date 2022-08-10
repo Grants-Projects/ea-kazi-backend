@@ -25,6 +25,7 @@ export class Ratings1659874533710 implements MigrationInterface {
                 {
                     name: 'score',
                     type: 'integer',
+                    isNullable: true,
                     default: null,
                 },
                 {
