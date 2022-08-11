@@ -1,10 +1,10 @@
 import express, { Router } from 'express';
 import CourseRouter from './course.route';
-import UserRouter from './user.route';
+import AuthRouter from './auth.route';
 
 const AppRouter: Router = express.Router();
 
-AppRouter.use('/user', UserRouter);
+AppRouter.use('/auth', AuthRouter);
 AppRouter.use('/courses', CourseRouter);
 
 export default AppRouter;
