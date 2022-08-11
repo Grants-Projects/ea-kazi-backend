@@ -1,3 +1,5 @@
+/** @format */
+
 import { injectable } from 'tsyringe';
 import { checkSchema } from 'express-validator';
 import validate from '../lib/validate';
@@ -63,8 +65,14 @@ class UserEntityValidator {
         },
         trim: true,
       },
+      password: {
+        in: ['body'],
+        notEmpty: {
+          errorMessage: 'Password field is required',
+        },
+      },
     })
-  )
+  );
 
   accountActivation = validate(
     checkSchema({
@@ -75,7 +83,7 @@ class UserEntityValidator {
         },
       },
     })
-  )
+  );
 
   resendAccountActivationEmail = validate(
     checkSchema({
@@ -86,7 +94,47 @@ class UserEntityValidator {
         },
       },
     })
-  )
+  );
+
+  forgotPassword = validate(
+    checkSchema({
+      email: {
+        in: ['body'],
+        isEmail: {
+          errorMessage: 'Input a valid email',
+        },
+      },
+    })
+  );
+
+  resetPassword = validate(
+    checkSchema({
+      token: {
+        in: ['query'],
+        isString: {
+          errorMessage: 'token must be a string',
+        },
+      },
+      email: {
+        in: ['body'],
+        isEmail: {
+          errorMessage: 'Input a valid email',
+        },
+      },
+      newPassword: {
+        in: ['body'],
+        isString: {
+          errorMessage: 'New Password must be a string',
+        },
+        isLength: {
+          options: {
+            min: 8,
+          },
+          errorMessage: 'Password must have minimum of eight characters',
+        },
+      },
+    })
+  );
 }
 
 export default UserEntityValidator;
