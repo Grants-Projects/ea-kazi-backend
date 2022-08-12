@@ -12,7 +12,7 @@ export class CourseRepository {
 		return await courseRepository.find();
 	};
 
-	createCourse = async (input: Partial<Course>) => {
-		return await courseRepository.save(courseRepository.create(input));
+	createCourse = async (course: Partial<Course>) => {
+		return await courseRepository.save(courseRepository.create(course));
 	};
 }
