@@ -55,5 +55,5 @@ import {
 		@UpdateDateColumn({
 			type: 'timestamp',
 		})
-		updatedAt!: Date;
+		updated_at!: Date;
 	}

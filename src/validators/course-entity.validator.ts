@@ -16,32 +16,6 @@ class CourseEntityValidator {
 				},
 				trim: true,
 			},
-			state: {
-				in: ['body'],
-				isString: {
-					errorMessage: 'State must be a string',
-				},
-				isLength: {
-					options: {
-						min: 2,
-					},
-					errorMessage: 'State must have minimum of two characters',
-				},
-				trim: true,
-			},
-			status: {
-				in: ['body'],
-				isString: {
-					errorMessage: 'Status must be a string',
-				},
-				isLength: {
-					options: {
-						min: 2,
-					},
-					errorMessage: 'Status must have minimum of two characters',
-				},
-				trim: true,
-			},
 			title: {
 				in: ['body'],
 				isString: {
