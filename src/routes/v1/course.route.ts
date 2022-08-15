@@ -16,4 +16,5 @@ router.post(
 	courseValidator.createCourseEntity,
 	courseController.createCourse
 );
+router.get('/:courseId', authMiddleware, courseController.getCourseDetails)
 export default router;

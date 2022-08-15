@@ -20,4 +20,12 @@ export class CourseRepository {
   createCourse = async (course: Partial<Course>) => {
     return await courseRepository.save(courseRepository.create(course));
   };
+
+  getCourseDetails = async (courseId) => {
+    return await courseRepository.find({
+      where: {
+        id: courseId,
+      },
+    });
+  };
 }

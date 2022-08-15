@@ -20,7 +20,6 @@ export class Courses1659482205775 implements MigrationInterface {
             {
               name: 'author_id',
               type: 'uuid',
-              default: null,
             },
             {
               name: 'state',

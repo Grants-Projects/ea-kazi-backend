@@ -1,0 +1,47 @@
+/** @format */
+
+import { injectable } from 'tsyringe';
+import { IRequest, IResponse } from '../common/http.interface';
+import { JobService } from '../services/job.service';
+
+@injectable()
+export class JobController {
+  constructor(private jobService: JobService) {}
+
+  getAllJobs = async (req: IRequest, res: IResponse) => {
+    try {
+      const jobs = await this.jobService.getAllJobs(req.query);
+
+      return res.ok(jobs, 'Jobs fetched successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching courses'
+      );
+    }
+  };
+
+  createJob = async (req: IRequest, res: IResponse) => {
+    try {
+      const job = await this.jobService.createJob(req);
+      return res.ok(job, 'Job created successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while creating job'
+      );
+    }
+  };
+
+  getJobDetails = async (req: IRequest, res: IResponse) => {
+    try {
+      const job = await this.jobService.getJobDetails(req.params.jobId);
+      return res.ok(job, 'Job fetched successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching job details'
+      );
+    }
+  };
+}
