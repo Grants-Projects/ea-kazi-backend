@@ -3,16 +3,16 @@ import { checkSchema } from 'express-validator';
 import validate from '../lib/validate';
 
 @injectable()
-class CourseEntityValidator {
-	createCourseEntity = validate(
+class JobEntityValidator {
+	createJobEntity = validate(
 		checkSchema({
-			author_id: {
+			recruiter_id: {
 				in: ['body'],
 				isString: {
-					errorMessage: 'Author Id must be a string',
+					errorMessage: 'Recruiter Id must be a string',
 				},
 				isUUID: {
-					errorMessage: 'Author Id  must be of a valid UUID type',
+					errorMessage: 'Recruiter Id  must be of a valid UUID type',
 				},
 				trim: true,
 			},
@@ -46,4 +46,4 @@ class CourseEntityValidator {
 	);
 }
 
-export default CourseEntityValidator;
+export default JobEntityValidator;

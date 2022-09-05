@@ -3,7 +3,7 @@
 import { CourseRepository } from '../repository/course.repository';
 import { injectable } from 'tsyringe';
 import { Course } from '../models';
-import { IRequest, IResponse } from '../common/http.interface';
+import { IRequest } from '../common/http.interface';
 import StateConstants from '../lib/state-constants';
 import StatusConstants from '../lib/status-constants';
 
@@ -15,10 +15,14 @@ export class CourseService {
     return await this.courseRepository.getAllCourses(query);
   };
 
-  createCourse = async (req: IRequest, res: IResponse): Promise<Course> => {
+  createCourse = async (req: IRequest): Promise<Course> => {
     const course = req.body;
     course.state = StateConstants.DRAFT;
     course.status = StatusConstants.NEW;
     return await this.courseRepository.createCourse(course);
+  };
+
+  getCourseDetails = async (courseId) => {
+    return await this.courseRepository.getCourseDetails(courseId);
   };
 }
