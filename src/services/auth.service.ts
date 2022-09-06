@@ -259,12 +259,12 @@ export class AuthService {
       }
 
       // 2.Check if user is verified
-      if (!user.verified_at) {
-        return res.badGateway(
-          null,
-          'You are not verified, check your email to verify your account or resend activation email'
-        );
-      }
+      // if (!user.verified_at) {
+      //   return res.badGateway(
+      //     null,
+      //     'You are not verified, check your email to verify your account or resend activation email'
+      //   );
+      // }
 
       //3. Check if password is valid
       if (!(await User.comparePasswords(password, user.password))) {
