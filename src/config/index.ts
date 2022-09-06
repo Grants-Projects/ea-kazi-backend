@@ -6,7 +6,7 @@ export const config = {
   appname: "eakazi",
   web: {
     port: process.env.PORT || "8082",
-    header_name: process.env.HEADER_NAME || 'eakazi-auth-token',
+    header_name: process.env.HEADER_NAME || 'x-auth-token',
     jwt_secret: process.env.JWT_SECRET || "myKXAXZXI902@@#@50381.C03",
     jwt_reset_secret: process.env.JWT_RESET_SECRET || "myKXA938u902.XI902@@#@50381.C03",
     jwt_duration: process.env.JWT_DURATION || '1h',
