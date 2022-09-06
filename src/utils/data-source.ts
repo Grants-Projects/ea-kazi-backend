@@ -33,7 +33,7 @@ export const AppDataSource = new DataSource({
   port: Number(process.env.MYSQL_PORT) || 3306,
   username: process.env.MYSQL_USER || 'marvelous',
   password: process.env.MYSQL_PASSWORD || 'marvelous',
-  database: process.env.MYSQL_DATABASE || 'ea-kazi',
+  database: process.env.MYSQL_DATABASE || '',
   synchronize: false,
   migrationsRun: true,
   type: 'mysql',
