@@ -155,23 +155,7 @@ export class AuthService {
         { expiresIn: config.web.jwt_email_duration }
       );
 
-      const emailData: IEmail = {
-        subject: 'Account Verification',
-        template_name: 'sign_verify',
-        recipient_email: user.email,
-        short_response_message:
-          'verify your account. The link will expire in 10 minutes',
-        action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
-      };
-
-      await this.emailService.sendEmail(
-        res,
-        emailData.subject,
-        emailData.template_name,
-        emailData.recipient_email,
-        emailData.short_response_message,
-        emailData.action_url
-      );
+      return res.ok(null, `User has been registered`);
     } catch (error) {
       return res.forbidden(
         error,

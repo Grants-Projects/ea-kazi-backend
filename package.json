@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
-    "start": "tsc && node .dist/index.js",
+    "clean": "rm -fr dist",
+    "build": "npm run clean && tsc",
+    "start": "node ./dist",
     "migrate": "yarn typeorm migration:generate ./src/migrations/added-user-entity -d ./src/utils/data-source.ts",
     "db:push": "yarn typeorm migration:run -d src/utils/data-source.ts",
     "docker:build": "docker-compose build",
