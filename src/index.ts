@@ -3,8 +3,8 @@
 import "reflect-metadata";
 import express, { Application } from "express";
 import { config } from "./config";
-import { AppDataSource } from "../src/utils/data-source";
-import Routes from "../src/routes";
+import { AppDataSource } from "./utils/data-source";
+import Routes from "./routes";
 import response from './lib/response';
 import passport from 'passport';
 import jwtMiddleware from "./middleware/jwt.middleware";
