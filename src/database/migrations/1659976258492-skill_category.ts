@@ -1,73 +1,68 @@
 /** @format */
 
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from "typeorm";
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export class skillCategory1659976258492 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const table = new Table({
-      name: "skill_category",
+      name: 'skill_category',
       columns: [
         {
-          name: "id",
-          type: "uuid",
+          name: 'id',
+          type: 'varchar',
           isPrimary: true,
           isGenerated: true,
-          generationStrategy: "uuid",
+          generationStrategy: 'uuid',
         },
         {
-          name: "title",
-          type: "varchar",
+          name: 'title',
+          type: 'varchar',
           default: null,
         },
         {
-          name: "description",
-          type: "longtext",
+          name: 'description',
+          type: 'longtext',
           isNullable: true,
           default: null,
         },
         {
-          name: "thumbnail_image",
-          type: "varchar",
+          name: 'thumbnail_image',
+          type: 'varchar',
           isNullable: true,
           default: null,
         },
         {
-          name: "image",
-          type: "varchar",
+          name: 'image',
+          type: 'varchar',
           isNullable: true,
           default: null,
         },
         {
-          name: "position",
-          type: "integer",
+          name: 'position',
+          type: 'integer',
           isNullable: true,
           default: null,
         },
         {
-          name: "parent_id",
-          type: "integer",
+          name: 'parent_id',
+          type: 'integer',
           default: null,
         },
         {
-          name: "is_active",
-          type: "tinyint",
+          name: 'is_active',
+          type: 'tinyint',
           default: null,
         },
         {
-          name: "created_at",
-          type: "timestamp",
-          default: "now()",
+          name: 'created_at',
+          type: 'timestamp',
+          default: 'now()',
         },
 
         {
-          name: "updated_at",
-          type: "timestamp",
-          default: "now()",
+          name: 'updated_at',
+          type: 'timestamp',
+          default: 'now()',
         },
       ],
     });
@@ -76,6 +71,6 @@ export class skillCategory1659976258492 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("skill_category");
+    await queryRunner.dropTable('skill_category');
   }
 }

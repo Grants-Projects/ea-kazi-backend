@@ -1,11 +1,6 @@
 /** @format */
 
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from "typeorm";
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export class job1659977064328 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -14,14 +9,14 @@ export class job1659977064328 implements MigrationInterface {
       columns: [
         {
           name: 'id',
-          type: 'uuid',
+          type: 'varchar',
           isPrimary: true,
           isGenerated: true,
           generationStrategy: 'uuid',
         },
         {
           name: 'recruiter_id',
-          type: 'uuid',
+          type: 'varchar',
         },
         {
           name: 'state',
@@ -53,7 +48,7 @@ export class job1659977064328 implements MigrationInterface {
         },
         {
           name: 'approved_by',
-          type: 'uuid',
+          type: 'varchar',
           default: null,
           isNullable: true,
         },
@@ -80,25 +75,25 @@ export class job1659977064328 implements MigrationInterface {
     await queryRunner.createTable(table, true);
 
     await queryRunner.createForeignKey(
-      "job",
+      'job',
       new TableForeignKey({
-        columnNames: ["recruiter_id"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "user",
+        columnNames: ['recruiter_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'user',
       })
     );
 
     await queryRunner.createForeignKey(
-      "job",
+      'job',
       new TableForeignKey({
-        columnNames: ["approved_by"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "user",
+        columnNames: ['approved_by'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'user',
       })
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("job");
+    await queryRunner.dropTable('job');
   }
 }
