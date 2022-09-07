@@ -1,68 +1,63 @@
 /** @format */
 
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from "typeorm";
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export class courseSkillCategory1659976635656 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const table = new Table({
-      name: "course_skill_category",
+      name: 'course_skill_category',
       columns: [
         {
-          name: "id",
-          type: "uuid",
+          name: 'id',
+          type: 'varchar',
           isPrimary: true,
           isGenerated: true,
-          generationStrategy: "uuid",
+          generationStrategy: 'uuid',
         },
         {
-          name: "skill_id",
-          type: "uuid",
+          name: 'skill_id',
+          type: 'varchar',
           default: null,
         },
         {
-          name: "course_id",
-          type: "uuid",
+          name: 'course_id',
+          type: 'varchar',
           default: null,
         },
         {
-          name: "created_at",
-          type: "timestamp",
-          default: "now()",
+          name: 'created_at',
+          type: 'timestamp',
+          default: 'now()',
         },
 
         {
-          name: "updated_at",
-          type: "timestamp",
-          default: "now()",
+          name: 'updated_at',
+          type: 'timestamp',
+          default: 'now()',
         },
       ],
     });
 
     await queryRunner.createTable(table, true);
     await queryRunner.createForeignKey(
-      "course_skill_category",
+      'course_skill_category',
       new TableForeignKey({
-        columnNames: ["skill_id"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "skill_category",
+        columnNames: ['skill_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'skill_category',
       })
     );
     await queryRunner.createForeignKey(
-      "course_skill_category",
+      'course_skill_category',
       new TableForeignKey({
-        columnNames: ["course_id"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "course",
+        columnNames: ['course_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'course',
       })
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("course_skill_category");
+    await queryRunner.dropTable('course_skill_category');
   }
 }
