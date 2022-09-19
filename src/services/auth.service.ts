@@ -69,11 +69,7 @@ export class AuthService {
         user_id: user.id,
         role_id: role.id,
       });
-      const token = jwt.sign(
-        { id: user.id, email: user.email },
-        config.web.jwt_activation,
-        { expiresIn: config.web.jwt_email_duration }
-      );
+
       delete user.password;
       return res.ok(user, `User has been registered`);
     } catch (error) {
