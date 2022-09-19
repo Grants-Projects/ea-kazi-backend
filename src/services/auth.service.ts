@@ -61,7 +61,7 @@ export class AuthService {
         return res.forbidden(userExist, 'Account already exist please login');
       }
       const role = await this.roleRepository.findUserByName(user_role.toLowerCase());
-      if (!role) res.notFound(null, 'user role does nor exist');
+      if (!role) return res.notFound(null, 'user role does nor exist');
       const user = await this.userRepository.createUser(req.body);
       if (!user) res.serverError(null, 'An error occured while creating account');
 
