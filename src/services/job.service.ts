@@ -16,13 +16,13 @@ export class JobService {
   };
 
   createJob = async (req: IRequest): Promise<Job> => {
-    try{
-    const job = req.body;
-    job.state = StateConstants.DRAFT;
-    job.status = StatusConstants.NEW;
-    return await this.jobRepository.createJob(job);
-    }catch(err){
-      console.log(err)
+    try {
+      const job = req.body;
+      job.state = StateConstants.DRAFT;
+      job.status = StatusConstants.NEW;
+      return await this.jobRepository.createJob(job);
+    } catch (err) {
+      console.log(err);
     }
   };
 

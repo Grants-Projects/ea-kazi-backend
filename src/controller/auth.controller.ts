@@ -1,15 +1,15 @@
 /** @format */
 
-import { injectable } from "tsyringe";
-import { IRequest, IResponse } from "../common/http.interface";
-import { LoggerHelper } from "../helper/logger";
-import { AuthService } from "../services/auth.service";
+import { injectable } from 'tsyringe';
+import { IRequest, IResponse } from '../common/http.interface';
+import { LoggerHelper } from '../helper/logger';
+import { AuthService } from '../services/auth.service';
 
 @injectable()
 export class AuthController {
   constructor(private authService: AuthService, private logger: LoggerHelper) {}
   registerUser = async (req: IRequest, res: IResponse) => {
-      await this.authService.createUser(req, res);
+    await this.authService.createUser(req, res);
   };
 
   loginUser = async (req: IRequest, res: IResponse) => {
@@ -26,10 +26,6 @@ export class AuthController {
 
   resendAccountActivationEmail = async (req: IRequest, res: IResponse) => {
     await this.authService.resendAccountActivationEmail(req, res);
-  };
-
-  refreshAccessTokenHandler = async (req: IRequest, res: IResponse) => {
-    await this.authService.refreshAccessTokenHandler(req, res);
   };
 
   logoutHandler = async (req: IRequest, res: IResponse) => {

@@ -1,7 +1,15 @@
 require('dotenv').config();
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { User, Certificate, Course, TrainerRatings, Job } from '../models';
+import {
+  User,
+  Certificate,
+  Course,
+  TrainerRatings,
+  Job,
+  Role,
+  UserRole,
+} from '../models';
 import {
   User1659482181387,
   Courses1659482205775,
@@ -18,6 +26,7 @@ import {
   job1659977064328,
   jobSkillCategory1659977206217,
   statusStateMapping1660212541650,
+  AddRole1660219541657,
 } from '../database/migrations';
 
 // const mysqlConfig = configuration.get<{
@@ -38,7 +47,7 @@ export const AppDataSource = new DataSource({
   migrationsRun: true,
   type: 'mysql',
   logging: false,
-  entities: [User, Certificate, Course, TrainerRatings, Job],
+  entities: [User, Certificate, Course, TrainerRatings, Job, Role, UserRole],
   migrations: [
     User1659482181387,
     Courses1659482205775,
@@ -55,6 +64,7 @@ export const AppDataSource = new DataSource({
     job1659977064328,
     jobSkillCategory1659977206217,
     statusStateMapping1660212541650,
+    AddRole1660219541657,
   ],
   // subscribers: ['src/subscribers/**/*{.ts,.js}'],
 });

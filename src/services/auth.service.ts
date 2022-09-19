@@ -13,6 +13,11 @@ import * as jwt from 'jsonwebtoken';
 import { EmailService } from './email.service';
 import { IEmail } from '../common/types/email';
 import bcrypt from 'bcryptjs';
+import { TokenService } from './token.service';
+import { RoleRepository } from '../repository/role.respository';
+import { UserRoleRepository } from '../repository/user.role.repository';
+import { use } from 'passport';
+import { UserRole } from '../constants/role.const';
 
 @injectable()
 export class AuthService {
@@ -20,104 +25,10 @@ export class AuthService {
     private userRepository: UserRepository,
     private redisClient: RedisCache,
     private logger: LoggerHelper,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private roleRepository: RoleRepository,
+    private userRoleRepository: UserRoleRepository
   ) {}
-
-  cookiesOptions: CookieOptions = {
-    httpOnly: true,
-    sameSite: 'lax',
-    // secure: true
-  };
-
-  accessTokenCookieOptions: CookieOptions = {
-    ...this.cookiesOptions,
-    expires: new Date(Date.now() + config.web.accessTokenExpiresIn * 60 * 1000),
-    maxAge: config.web.accessTokenExpiresIn * 60 * 1000,
-  };
-
-  refreshTokenCookieOptions: CookieOptions = {
-    ...this.cookiesOptions,
-    expires: new Date(Date.now() + config.web.refreshTokenExpiresIn * 60 * 1000),
-    maxAge: config.web.refreshTokenExpiresIn * 60 * 1000,
-  };
-
-  signTokens = async (user: User) => {
-    // 1. Create Session
-    this.redisClient.set(user.id, user, config.redis.ttl);
-
-    // 2. Create Access and Refresh tokens
-    const access_token = signJwt(
-      { sub: user.id },
-      {
-        expiresIn: `${config.web.accessTokenExpiresIn}m`,
-      }
-    );
-
-    const refresh_token = signJwt(
-      { sub: user.id },
-      {
-        expiresIn: `${config.web.refreshTokenExpiresIn}m`,
-      }
-    );
-    this.logger.log({ access_token, refresh_token });
-
-    return { access_token, refresh_token };
-  };
-
-  refreshAccessTokenHandler = async (req: IRequest, res: IResponse) => {
-    try {
-      const refresh_token = req.cookies.refresh_token;
-
-      const message = 'Could not refresh access token';
-
-      if (!refresh_token) {
-        return res.forbidden(null, message);
-      }
-
-      // Validate refresh token
-      const decoded = verifyJwt<{ sub: string }>(refresh_token);
-
-      if (!decoded) {
-        return res.forbidden(null, message);
-      }
-
-      // Check if user has a valid session
-      const session = await this.redisClient.get(decoded.sub);
-
-      if (!session) {
-        return res.forbidden(null, message);
-      }
-
-      // Check if user still exist
-      const user = await this.userRepository.findUserById(session?.id);
-
-      if (!user) {
-        return res.forbidden(null, message);
-      }
-
-      // Sign new access token
-      const access_token = signJwt(
-        { sub: user.id },
-        {
-          expiresIn: `${config.web.accessTokenExpiresIn}m`,
-        }
-      );
-
-      // 4. Add Cookies
-      res.cookie('access_token', access_token, this.accessTokenCookieOptions);
-      res.cookie('logged_in', true, {
-        ...this.accessTokenCookieOptions,
-        httpOnly: false,
-      });
-
-      return res.ok({ access_token }, 'Access Token Refresh Success');
-    } catch (err) {
-      return res.serverError(
-        err,
-        err.message || 'An server error occured while refreshing access token'
-      );
-    }
-  };
 
   logout = (res: IResponse) => {
     res.cookie('access_token', '', { maxAge: 1 });
@@ -143,19 +54,28 @@ export class AuthService {
   createUser = async (req: IRequest, res: IResponse) => {
     try {
       const { email } = req.body;
+      const { user_role } = req.body;
       const userExist = await this.userRepository.findUserByEmail(email);
 
       if (userExist) {
         return res.forbidden(userExist, 'Account already exist please login');
       }
+      const role = await this.roleRepository.findUserByName(user_role.toLowerCase());
+      if (!role) res.notFound(null, 'user role does nor exist');
       const user = await this.userRepository.createUser(req.body);
+      if (!user) res.serverError(null, 'An error occured while creating account');
+
+      await this.userRoleRepository.createRole({
+        user_id: user.id,
+        role_id: role.id,
+      });
       const token = jwt.sign(
         { id: user.id, email: user.email },
         config.web.jwt_activation,
         { expiresIn: config.web.jwt_email_duration }
       );
-
-      return res.ok(null, `User has been registered`);
+      delete user.password;
+      return res.ok(user, `User has been registered`);
     } catch (error) {
       return res.forbidden(
         error,
@@ -237,11 +157,24 @@ export class AuthService {
       const { email, password } = req.body;
       const user = await this.userRepository.findUserByEmail(email);
 
-      // 1. Check if user exist
       if (!user) {
         return res.notFound(null, 'Invalid email or password');
       }
 
+      const token: any = await TokenService.generateUserToken(
+        {
+          userId: user.id,
+          scopes: ['verified', UserRole[user.user_role.toUpperCase()]],
+          ttl: Number('30000'),
+          payload: {
+            id: user.id,
+            email: user.email,
+            firstname: user.first_name,
+            lastname: user.last_name,
+          },
+        },
+        'ea-kazi'
+      );
       // 2.Check if user is verified
       // if (!user.verified_at) {
       //   return res.badGateway(
@@ -255,16 +188,6 @@ export class AuthService {
         return res.notFound(null, 'Invalid email or password');
       }
 
-      // 4. Sign Access and Refresh Tokens
-      const { access_token, refresh_token } = await this.signTokens(user);
-      // // 5. Add Cookies
-      res.cookie('access_token', access_token, this.accessTokenCookieOptions);
-      res.cookie('refresh_token', refresh_token, this.refreshTokenCookieOptions);
-      res.cookie('logged_in', true, {
-        ...this.accessTokenCookieOptions,
-        httpOnly: false,
-      });
-
       // 6. Send response
       const data = {
         id: user.id,
@@ -272,10 +195,11 @@ export class AuthService {
         last_name: user.last_name,
         email: user.email,
         bio: user.bio,
-        token: access_token,
+        token: token.token,
       };
       return res.ok(data, 'Login Success');
     } catch (err) {
+      console.log(err);
       return res.serverError(err, 'Invalid email or password');
     }
   };
