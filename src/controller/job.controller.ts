@@ -36,6 +36,7 @@ export class JobController {
   getJobDetails = async (req: IRequest, res: IResponse) => {
     try {
       const job = await this.jobService.getJobDetails(req.params.jobId);
+      if (!job) res.notFound(null, 'Job does not exist');
       return res.ok(job, 'Job fetched successfully');
     } catch (error) {
       return res.serverError(

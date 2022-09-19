@@ -34,7 +34,6 @@ router.put(
   authController.resetPassword
 );
 
-router.get('/refresh', authController.refreshAccessTokenHandler);
 router.get('/logout', authMiddleware, authController.logoutHandler);
 
 router.get('/secureurl', authMiddleware, authController.secureurl);

@@ -13,4 +13,4 @@ export * from './1659976635656-course_skill_category';
 export * from './1659977064328-job';
 export * from './1659977206217-job_skill_category';
 export * from './1660212541650-status_state_mapping';
-
+export * from './1660219541657-add-role-User';
