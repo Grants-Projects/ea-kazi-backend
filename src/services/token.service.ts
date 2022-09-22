@@ -63,7 +63,6 @@ const getPublicKey = () => {
 export const TokenService = {
   async generateToken(
     payload: Record<string, unknown>,
-    tokenExpiry: number | string,
     tokenType: string,
     audience: string
   ): Promise<any> {
@@ -72,7 +71,6 @@ export const TokenService = {
         algorithm: JWT_ALGO,
         issuer: JWT_ISSUER,
         audience,
-        expiresIn: tokenExpiry,
       });
 
       const createdAt = new Date();
@@ -80,7 +78,6 @@ export const TokenService = {
       return Promise.resolve({
         token,
         createdAt,
-        expiresAt: moment(createdAt).add(tokenExpiry, 'seconds').toDate(),
       });
     } catch (err) {
       return Promise.reject(err);
@@ -102,7 +99,6 @@ export const TokenService = {
 
     const tokenObject = await this.generateToken(
       jwtPayload,
-      request.ttl,
       JWT_TOKEN_TYPE.USER,
       audience
     );

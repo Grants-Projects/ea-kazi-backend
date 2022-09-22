@@ -19,18 +19,27 @@ import { TokenService } from '../services/token.service';
 export default (scope: string = null) => {
   try {
     return async (req: IRequest, res: IResponse, next) => {
-      let auth = req.headers['x-auth-token']
-        ? req.headers['x-auth-token']
-        : req.headers['Authorization'];
-      let decoded = await TokenService.verifyServiceToken(auth as string);
-      req.body['user'] = decoded;
-      console.log(decoded);
-      if (scope && !decoded.scopes.includes(scope.toLocaleUpperCase())) {
-        res.forbidden(null, 'User does not have the required access scope');
+      try {
+        let auth = req.headers['x-auth-token']
+          ? req.headers['x-auth-token']
+          : req.headers['Authorization'];
+        if (!auth) {
+          return res.forbidden(null, 'Auth is required');
+        }
+        let decoded = await TokenService.verifyServiceToken(auth as string);
+
+        req.body['user'] = decoded;
+        console.log(decoded);
+        if (scope && !decoded.scopes.includes(scope.toLocaleUpperCase())) {
+          return res.forbidden(null, 'User does not have the required access scope');
+        }
+
+        next();
+      } catch (err) {
+        return res.forbidden(null, 'Bad JWT');
       }
-      next();
     };
   } catch (err) {
-    console.log(err);
+    console.log('wow');
   }
 };
