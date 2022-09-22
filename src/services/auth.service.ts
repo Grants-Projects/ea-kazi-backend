@@ -161,7 +161,6 @@ export class AuthService {
         {
           userId: user.id,
           scopes: ['verified', UserRole[user.user_role.toUpperCase()]],
-          ttl: Number('30000'),
           payload: {
             id: user.id,
             email: user.email,

@@ -3,6 +3,5 @@ export interface IUserTokenRequest {
   deviceIdentifier?: string;
   isOneTime?: boolean;
   scopes: string[];
-  ttl: number;
   payload: object;
 }
