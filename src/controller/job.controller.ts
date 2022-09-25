@@ -24,6 +24,7 @@ export class JobController {
   createJob = async (req: IRequest, res: IResponse) => {
     try {
       const job = await this.jobService.createJob(req);
+      console.log(job);
       return res.ok(job, 'Job created successfully');
     } catch (error) {
       return res.serverError(

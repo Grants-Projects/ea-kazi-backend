@@ -5,3 +5,5 @@ export * from './trainer_ratings';
 export * from './certificates';
 export * from './roles';
 export * from './user_role';
+export * from './skills';
+export * from './job_skill_category';

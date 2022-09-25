@@ -6,6 +6,13 @@ import StateConstants from '../lib/state-constants';
 import StatusConstants from '../lib/status-constants';
 import { Job } from '../models/jobs';
 import { JobRepository } from '../repository/job.repository';
+import { Skills } from '../models';
+import { JobSkillCategory } from '../models';
+import {
+  ServerError,
+  UnauthorizedAccess,
+  BadRequest,
+} from '../utils/errors/ErrorHandlers';
 
 @injectable()
 export class JobService {
@@ -20,9 +27,21 @@ export class JobService {
       const job = req.body;
       job.state = StateConstants.DRAFT;
       job.status = StatusConstants.NEW;
-      return await this.jobRepository.createJob(job);
+      let create_job = await Job.create(job).save();
+      let skill = await Skills.findOne({
+        where: {
+          id: req.body.skill,
+        },
+      });
+      if (!skill)
+        throw new BadRequest({ data: null, message: 'Skill id is invalid' });
+      await JobSkillCategory.create({
+        skill_id: skill.id,
+        job_id: create_job.id,
+      }).save();
+      return create_job;
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   };
 
