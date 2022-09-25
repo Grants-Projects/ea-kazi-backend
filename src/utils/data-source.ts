@@ -9,6 +9,8 @@ import {
   Job,
   Role,
   UserRole,
+  Skills,
+  JobSkillCategory,
 } from '../models';
 import {
   User1659482181387,
@@ -47,7 +49,17 @@ export const AppDataSource = new DataSource({
   migrationsRun: true,
   type: 'mysql',
   logging: false,
-  entities: [User, Certificate, Course, TrainerRatings, Job, Role, UserRole],
+  entities: [
+    User,
+    Certificate,
+    Course,
+    TrainerRatings,
+    Job,
+    Role,
+    UserRole,
+    Skills,
+    JobSkillCategory,
+  ],
   migrations: [
     User1659482181387,
     Courses1659482205775,

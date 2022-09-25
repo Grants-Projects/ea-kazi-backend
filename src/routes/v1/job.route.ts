@@ -11,7 +11,7 @@ const jobValidator: any = container.resolve(JobEntityValidator);
 router.get('/', authMiddleware(), jobController.getAllJobs);
 router.post(
   '/',
-  authMiddleware,
+  authMiddleware(),
   jobValidator.createJobEntity,
   jobController.createJob
 );
