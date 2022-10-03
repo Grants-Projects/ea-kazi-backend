@@ -14,3 +14,6 @@ export * from './1659977064328-job';
 export * from './1659977206217-job_skill_category';
 export * from './1660212541650-status_state_mapping';
 export * from './1660219541657-add-role-User';
+export * from './1660219541658-update-job';
+export * from './1660219541659-update-job';
+export * from './1660219541660-update-job';

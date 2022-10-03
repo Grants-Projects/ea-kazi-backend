@@ -7,26 +7,46 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
+  OneToOne,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Job, Skills } from '.';
 
 @Entity('job_skill_category')
 export class JobSkillCategory extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
-  job_id!: string;
+  @Column({
+    type: 'varchar',
+    name: 'job_id',
+  })
+  jobId!: string;
 
-  @Column()
-  skill_id!: string;
+  @Column({
+    type: 'varchar',
+    name: 'skill_id',
+  })
+  skillId!: string;
 
   @CreateDateColumn({
     type: 'timestamp',
+    name: 'created_at',
   })
-  created_at!: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
+    name: 'updated_at',
   })
-  updated_at!: Date;
+  updatedAt!: Date;
+
+  @ManyToOne(() => Job, (job) => job.skills)
+  @JoinColumn({ name: 'job_id', referencedColumnName: 'id' })
+  job: Job;
+
+  @ManyToOne(() => Skills, (skill) => skill.skills)
+  @JoinColumn({ name: 'skill_id', referencedColumnName: 'id' })
+  skill: Skills;
 }

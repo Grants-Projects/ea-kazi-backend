@@ -5,7 +5,9 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
+  OneToMany,
 } from 'typeorm';
+import { JobSkillCategory } from '.';
 
 @Entity('skill_category')
 export class Skills extends BaseEntity {
@@ -42,4 +44,7 @@ export class Skills extends BaseEntity {
     type: 'timestamp',
   })
   updated_at!: Date;
+
+  @OneToMany(() => JobSkillCategory, (skill) => skill.job)
+  skills: JobSkillCategory[];
 }
