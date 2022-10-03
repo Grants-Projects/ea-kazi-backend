@@ -1,52 +1,92 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-    CreateDateColumn,
-    BaseEntity,
-  } from 'typeorm'
-  
-  @Entity('job')
-  export class Job extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  CreateDateColumn,
+  BaseEntity,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { JobSkillCategory, User } from '.';
 
-    @Column()
-    recruiter_id!: string;
+export enum Culture {
+  REMOTE = 'Remote',
+  FULLTIME = 'Full Time',
+  PARTTIME = 'Part Time ',
+}
 
-    @Column()
-    state!: string;
+@Entity('job')
+export class Job extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-    @Column()
-    status!: string;
+  @Column({
+    type: 'varchar',
+    name: 'recruiter_id',
+  })
+  recruiterId!: string;
 
-    @Column()
-    title!: string;
+  @Column()
+  state!: string;
 
-    @Column()
-    description!: string;
+  @Column()
+  status!: string;
 
-    @CreateDateColumn({
-      type: 'timestamp',
-    })
-    expires_at!: Date;
+  @Column()
+  title!: string;
 
-    @Column()
-    approved_by!: string;
+  @Column()
+  description!: string;
 
-    @CreateDateColumn({
-      type: 'timestamp',
-    })
-    approved_at!: Date;
+  @Column({
+    type: 'enum',
+    enum: Culture,
+    default: Culture.FULLTIME,
+  })
+  culture!: Culture;
 
-    @CreateDateColumn({
-      type: 'timestamp',
-    })
-    created_at!: Date;
+  @Column()
+  location!: string;
 
-    @UpdateDateColumn({
-      type: 'timestamp',
-    })
-    updated_at!: Date;
-  }
+  @Column()
+  image!: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    name: 'expires_at',
+  })
+  expiresAt!: Date;
+
+  @Column({
+    type: 'varchar',
+    name: 'approved_by',
+  })
+  approvedBy!: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    name: 'approved_at',
+  })
+  approvedAt!: Date;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    name: 'created_at',
+  })
+  createdAt!: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    name: 'updated_at',
+  })
+  updatedAt!: Date;
+
+  @OneToMany((type) => JobSkillCategory, (skill) => skill.job)
+  skills: JobSkillCategory[];
+
+  // @ManyToOne(() => User, (user) => user.job)
+  // @JoinColumn({ name: 'recruiter_id', referencedColumnName: 'id' })
+  // user: User;
+}

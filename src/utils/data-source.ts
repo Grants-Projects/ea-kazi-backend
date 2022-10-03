@@ -29,6 +29,9 @@ import {
   jobSkillCategory1659977206217,
   statusStateMapping1660212541650,
   AddRole1660219541657,
+  UpdateJob1660219541658,
+  UpdateJob1660219541659,
+  UpdateJob1660219541660,
 } from '../database/migrations';
 
 // const mysqlConfig = configuration.get<{
@@ -48,7 +51,7 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   migrationsRun: true,
   type: 'mysql',
-  logging: false,
+  logging: true,
   entities: [
     User,
     Certificate,
@@ -77,6 +80,9 @@ export const AppDataSource = new DataSource({
     jobSkillCategory1659977206217,
     statusStateMapping1660212541650,
     AddRole1660219541657,
+    UpdateJob1660219541658,
+    UpdateJob1660219541659,
+    UpdateJob1660219541660,
   ],
   // subscribers: ['src/subscribers/**/*{.ts,.js}'],
 });

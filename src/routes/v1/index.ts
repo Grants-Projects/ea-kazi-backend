@@ -4,6 +4,7 @@ import AuthRouter from './auth.route';
 import CertificateRouter from './certificate.route';
 import JobRouter from './job.route';
 import SkillRouter from './skills.route';
+import UserRouter from './user.route';
 
 const AppRouter: Router = express.Router();
 
@@ -12,4 +13,5 @@ AppRouter.use('/courses', CourseRouter);
 AppRouter.use('/certificates', CertificateRouter);
 AppRouter.use('/jobs', JobRouter);
 AppRouter.use('/skills', SkillRouter);
+AppRouter.use('/user', UserRouter);
 export default AppRouter;

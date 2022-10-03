@@ -7,13 +7,15 @@ import {
   BaseEntity,
   BeforeInsert,
   Index,
+  OneToMany,
 } from 'typeorm';
 import bcrypt from 'bcryptjs';
+import { Job } from '.';
 
 @Entity('user')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ default: null })
   first_name!: string;
@@ -63,4 +65,7 @@ export class User extends BaseEntity {
     type: 'timestamp',
   })
   updated_at!: Date;
+
+  // @OneToMany(() => Job, (job) => job.user, { cascade: true })
+  // job: Job[];
 }
