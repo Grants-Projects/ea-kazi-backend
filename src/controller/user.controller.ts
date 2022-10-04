@@ -19,4 +19,15 @@ export class UserController {
       );
     }
   };
+  getUserDetails = async (req: IRequest, res: IResponse) => {
+    try {
+      const users = await this.userService.findUser(req.params.userId);
+      return res.ok(users, 'users fetched successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching courses'
+      );
+    }
+  };
 }

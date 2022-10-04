@@ -6,5 +6,6 @@ import authMiddleware from '../../middleware/auth.middleware';
 
 const userController: any = container.resolve(UserController);
 router.get('/', authMiddleware(), userController.getUserProfile);
+router.get('/:userId', authMiddleware(), userController.getUserDetails);
 
 export default router;
