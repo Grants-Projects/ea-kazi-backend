@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   BaseEntity,
 } from 'typeorm';
+import { STATUS } from '../common/types/status';
 
 @Entity('apply_job')
 export class ApplyJob extends BaseEntity {
@@ -17,6 +18,13 @@ export class ApplyJob extends BaseEntity {
 
   @Column({ default: null })
   job_id!: string;
+
+  @Column({
+    type: 'enum',
+    enum: STATUS,
+    default: STATUS.PENDING,
+  })
+  status!: STATUS;
 
   @CreateDateColumn({
     type: 'timestamp',

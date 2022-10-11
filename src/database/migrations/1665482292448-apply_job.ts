@@ -18,6 +18,11 @@ export class applyJob1665482292448 implements MigrationInterface {
           default: null,
         },
         {
+          name: 'status',
+          type: 'enum',
+          enum: ['PENDING', 'ACCEPTED', 'REJECTED'],
+        },
+        {
           name: 'user_id',
           type: 'varchar',
           default: null,
