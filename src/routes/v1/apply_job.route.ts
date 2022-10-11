@@ -11,7 +11,7 @@ const applyJobValidator: ApplyJobEntityValidator = container.resolve(ApplyJobEnt
 router.post(
   '/',
   authMiddleware(),
-  applyJobValidator.createCourseEntity,
+  applyJobValidator.createJobEntity,
   applyJobController.createJobApplication
 );
 

@@ -10,7 +10,7 @@ export class ApplyJobController {
 
   createJobApplication = async (req: IRequest, res: IResponse) => {
     try {
-      req.body.is_active = true;
+      req.body.user_id = req.body.user.userId;
       return res.ok(
         await this.applyJobService.applyForJob(req.body),
         'Job applied successfully'
