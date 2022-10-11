@@ -32,7 +32,9 @@ import {
   UpdateJob1660219541658,
   UpdateJob1660219541659,
   UpdateJob1660219541660,
+  applyJob1665482292448,
 } from '../database/migrations';
+import { ApplyJob } from '../models/apply_job';
 
 // const mysqlConfig = configuration.get<{
 //   host: string;
@@ -62,6 +64,7 @@ export const AppDataSource = new DataSource({
     UserRole,
     Skills,
     JobSkillCategory,
+    ApplyJob
   ],
   migrations: [
     User1659482181387,
@@ -83,6 +86,7 @@ export const AppDataSource = new DataSource({
     UpdateJob1660219541658,
     UpdateJob1660219541659,
     UpdateJob1660219541660,
+    applyJob1665482292448
   ],
   // subscribers: ['src/subscribers/**/*{.ts,.js}'],
 });
