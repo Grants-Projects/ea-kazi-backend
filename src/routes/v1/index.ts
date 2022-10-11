@@ -5,6 +5,7 @@ import CertificateRouter from './certificate.route';
 import JobRouter from './job.route';
 import SkillRouter from './skills.route';
 import UserRouter from './user.route';
+import ApplyJobRouter from './apply_job.route';
 
 const AppRouter: Router = express.Router();
 
@@ -14,4 +15,6 @@ AppRouter.use('/certificates', CertificateRouter);
 AppRouter.use('/jobs', JobRouter);
 AppRouter.use('/skills', SkillRouter);
 AppRouter.use('/user', UserRouter);
+AppRouter.use('/apply-job', ApplyJobRouter);
+
 export default AppRouter;
