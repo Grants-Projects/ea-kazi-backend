@@ -23,17 +23,4 @@ export class ApplyJobController {
     }
   };
 
-  getFreelancersOnAJob = async (req: IRequest, res: IResponse) => {
-    try {
-      return res.ok(
-        await this.applyJobService.getFreelancersOnAJob(req.params),
-        'Job fetched successfully'
-      );
-    } catch (error) {
-      return res.serverError(
-        error,
-        error.message || 'An error occured while fetching job info'
-      );
-    }
-  };
 }

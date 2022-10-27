@@ -8,6 +8,7 @@ import JobEntityValidator from '../../validators/job-entity.validator';
 const jobController: JobController = container.resolve(JobController);
 const jobValidator: any = container.resolve(JobEntityValidator);
 
+router.get('/applications', authMiddleware(), jobController.recruiterJobList);
 router.get('/', authMiddleware(), jobController.getAllJobs);
 router.post(
   '/',
@@ -16,5 +17,6 @@ router.post(
   jobController.createJob
 );
 router.get('/:jobId', authMiddleware(), jobController.getJobDetails);
-router.get('/recruiter/created', authMiddleware(), jobController.recruiterJobList);
+
+router.get('/:jobId/apply', authMiddleware(), jobController.getFreelancersOnAJob);
 export default router;
