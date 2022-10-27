@@ -29,7 +29,7 @@ export default (scope: string = null) => {
         let decoded = await TokenService.verifyServiceToken(auth as string);
 
         req.body['user'] = decoded;
-        console.log(decoded);
+        // console.log(decoded);
         if (scope && !decoded.scopes.includes(scope.toLocaleUpperCase())) {
           return res.forbidden(null, 'User does not have the required access scope');
         }

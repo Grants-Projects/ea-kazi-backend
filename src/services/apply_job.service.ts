@@ -25,4 +25,5 @@ export class ApplyJobService {
     }
     return await ApplyJob.create(application).save();
   };
+
 }
