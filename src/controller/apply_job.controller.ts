@@ -27,7 +27,7 @@ export class ApplyJobController {
     try {
       return res.ok(
         await this.applyJobService.getFreelancersOnAJob(req.params),
-        'Job applied successfully'
+        'Job fetched successfully'
       );
     } catch (error) {
       return res.serverError(

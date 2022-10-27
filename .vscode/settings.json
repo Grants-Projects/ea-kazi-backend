@@ -4,5 +4,5 @@
   },
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  "[typescript]": { "editor.defaultFormatter": "SimonSiefke.prettier-vscode" }
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }
 }
