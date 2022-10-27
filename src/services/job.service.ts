@@ -74,7 +74,7 @@ export class JobService {
     return jobs;
   };
 
-  getFreelancersOnAJob = async (job: any): Promise<ApplyJob[]> => {
+  getJobApplications = async (job: any): Promise<ApplyJob[]> => {
     const jobApplied = await Job.findOne({
       where: {
         id: job.jobId,
@@ -93,6 +93,9 @@ export class JobService {
         'user.email',
         'user.first_name',
         'user.last_name',
+        'a.status',
+        'a.created_at',
+        'a.updated_at'
       ])
       .where('a.job_id = :job', {
         job: job.jobId,

@@ -27,13 +27,12 @@ export default (scope: string = null) => {
           return res.forbidden(null, 'Auth is required');
         }
         let decoded = await TokenService.verifyServiceToken(auth as string);
-
+       console.log("decoded", decoded)
         req.body['user'] = decoded;
         // console.log(decoded);
         if (scope && !decoded.scopes.includes(scope.toLocaleUpperCase())) {
           return res.forbidden(null, 'User does not have the required access scope');
         }
-
         next();
       } catch (err) {
         return res.forbidden(null, 'Bad JWT');
