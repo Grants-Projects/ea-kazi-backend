@@ -37,7 +37,7 @@ export class ApplyJobService {
       throw new Error('Job does not exist.!');
     }
     const users = await ApplyJob.createQueryBuilder('a')
-      .leftJoinAndSelect('a.user', 'user')
+      .leftJoin('a.user', 'user')
       .select([
         'a.id',
         'a.job_id',
