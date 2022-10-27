@@ -48,9 +48,11 @@ export class JobController {
 
   recruiterJobList = async (req: IRequest, res: IResponse) => {
     try {
+      console.log("here wow")
       const job = await this.jobService.recruiterJobList(req.body);
       return res.ok(job, 'Jobs fetched successfully');
     } catch (error) {
+      console.log("errerr", error)
       return res.serverError(
         error,
         error.message || 'An error occured while fetching list of jobs'
@@ -58,10 +60,10 @@ export class JobController {
     }
   };
 
-  getFreelancersOnAJob = async (req: IRequest, res: IResponse) => {
+  getJobApplications = async (req: IRequest, res: IResponse) => {
     try {
       return res.ok(
-        await this.jobService.getFreelancersOnAJob(req.params),
+        await this.jobService.getJobApplications(req.params),
         'Job fetched successfully'
       );
     } catch (error) {

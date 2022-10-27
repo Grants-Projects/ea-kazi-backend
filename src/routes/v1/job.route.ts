@@ -18,5 +18,5 @@ router.post(
 );
 router.get('/:jobId', authMiddleware(), jobController.getJobDetails);
 
-router.get('/:jobId/apply', authMiddleware(), jobController.getFreelancersOnAJob);
+router.get('/:jobId/applications', authMiddleware(), jobController.getJobApplications);
 export default router;
