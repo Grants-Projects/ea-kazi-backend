@@ -10,6 +10,6 @@ const jobController: JobController = container.resolve(JobController);
 const userController: any = container.resolve(UserController);
 router.get('/', authMiddleware(), userController.getUserProfile);
 router.get('/:userId', authMiddleware(), userController.getUserDetails);
-router.get('/job/applications', authMiddleware(), jobController.recruiterJobList);
+router.get('/jobs/created', authMiddleware(), jobController.recruiterJobList);
 
 export default router;
