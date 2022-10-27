@@ -16,6 +16,7 @@ import {
   BadRequest,
 } from '../utils/errors/ErrorHandlers';
 import { UserService } from './user.service';
+import { ApplyJob } from '../models/apply_job';
 
 @injectable()
 export class JobService {
@@ -62,5 +63,41 @@ export class JobService {
 
   getJobDetails = async (jobId) => {
     return await this.jobRepository.getJobDetails(jobId);
+  };
+
+  recruiterJobList = async (recruiter: any): Promise<Job[]> => {
+    const jobs = await Job.find({
+      where: {
+        recruiterId: recruiter.user.userId,
+      },
+    });
+    return jobs;
+  };
+
+  getFreelancersOnAJob = async (job: any): Promise<ApplyJob[]> => {
+    const jobApplied = await Job.findOne({
+      where: {
+        id: job.jobId,
+      },
+    });
+
+    if (!jobApplied) {
+      throw new Error('Job does not exist.!');
+    }
+    const users = await ApplyJob.createQueryBuilder('a')
+      .leftJoin('a.user', 'user')
+      .select([
+        'a.id',
+        'a.job_id',
+        'user.id',
+        'user.email',
+        'user.first_name',
+        'user.last_name',
+      ])
+      .where('a.job_id = :job', {
+        job: job.jobId,
+      })
+      .getMany();
+    return users;
   };
 }
