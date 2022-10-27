@@ -43,7 +43,6 @@ export class ApplyJobService {
         'a.job_id',
         'user.id',
         'user.email',
-        'user.email',
         'user.first_name',
         'user.last_name',
       ])
