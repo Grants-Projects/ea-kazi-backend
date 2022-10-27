@@ -5,7 +5,7 @@ import { JobController } from '../../controller/job.controller';
 import authMiddleware from '../../middleware/auth.middleware';
 import JobEntityValidator from '../../validators/job-entity.validator';
 
-const jobController: any = container.resolve(JobController);
+const jobController: JobController = container.resolve(JobController);
 const jobValidator: any = container.resolve(JobEntityValidator);
 
 router.get('/', authMiddleware(), jobController.getAllJobs);
@@ -16,4 +16,5 @@ router.post(
   jobController.createJob
 );
 router.get('/:jobId', authMiddleware(), jobController.getJobDetails);
+router.get('/recruiter/created', authMiddleware(), jobController.recruiterJobList);
 export default router;

@@ -63,4 +63,13 @@ export class JobService {
   getJobDetails = async (jobId) => {
     return await this.jobRepository.getJobDetails(jobId);
   };
+
+  recruiterJobList = async (recruiter: any): Promise<Job[]> => {
+    const jobs = await Job.find({
+      where: {
+        recruiterId: recruiter.user.userId,
+      },
+    });
+    return jobs;
+  };
 }

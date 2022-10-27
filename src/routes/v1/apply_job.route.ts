@@ -15,4 +15,10 @@ router.post(
   applyJobController.createJobApplication
 );
 
+router.get(
+  '/freelancers/:jobId',
+  authMiddleware(),
+  applyJobController.getFreelancersOnAJob
+);
+
 export default router;

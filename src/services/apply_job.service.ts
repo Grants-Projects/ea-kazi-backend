@@ -25,4 +25,32 @@ export class ApplyJobService {
     }
     return await ApplyJob.create(application).save();
   };
+
+  getFreelancersOnAJob = async (job: any): Promise<ApplyJob[]> => {
+    const jobApplied = await Job.findOne({
+      where: {
+        id: job.jobId,
+      },
+    });
+
+    if (!jobApplied) {
+      throw new Error('Job does not exist.!');
+    }
+    const users = await ApplyJob.createQueryBuilder('a')
+      .leftJoinAndSelect('a.user', 'user')
+      .select([
+        'a.id',
+        'a.job_id',
+        'user.id',
+        'user.email',
+        'user.email',
+        'user.first_name',
+        'user.last_name',
+      ])
+      .where('a.job_id = :job', {
+        job: job.jobId,
+      })
+      .getMany();
+    return users;
+  };
 }
