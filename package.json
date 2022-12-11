@@ -30,7 +30,6 @@
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
     "@types/ejs": "^3.1.1",
-    "@types/express-serve-static-core": "^4.17.31",
     "@types/ioredis": "^4.28.8",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/passport": "^1.0.9",
