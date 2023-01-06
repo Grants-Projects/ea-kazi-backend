@@ -23,6 +23,8 @@ export class CourseController {
 
   createCourse = async (req: IRequest, res: IResponse) => {
     try {
+      
+      req.body.author_id = req.body.user.userId;
       const course = await this.courseService.createCourse(req);
       return res.ok(course, 'Course created successfully');
     } catch (error) {
@@ -44,4 +46,14 @@ export class CourseController {
       );
     }
   };
+
+  getCourses = async (req: IRequest, res: IResponse) => {
+    try{
+     const course = await this.courseService.getCourses(req.body.user.userId);
+      return res.ok(course, 'Course fetched successfully');
+    }catch(error){
+
+    }
+    
+  }
 }

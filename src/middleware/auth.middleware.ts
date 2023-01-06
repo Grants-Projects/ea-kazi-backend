@@ -33,6 +33,7 @@ export default (scope: string = null) => {
         if (scope && !decoded.scopes.includes(scope.toLocaleUpperCase())) {
           return res.forbidden(null, 'User does not have the required access scope');
         }
+         console.log("here in auth")
         next();
       } catch (err) {
         return res.forbidden(null, 'Bad JWT');

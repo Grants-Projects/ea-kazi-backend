@@ -18,3 +18,4 @@ export * from './1660219541658-update-job';
 export * from './1660219541659-update-job';
 export * from './1660219541660-update-job';
 export * from './1665482292448-apply_job'
+export * from './1665482292449-update_courses'
