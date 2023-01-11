@@ -52,8 +52,6 @@ export class CourseController {
      const course = await this.courseService.getCourses(req.body.user.userId);
       return res.ok(course, 'Course fetched successfully');
     }catch(error){
-
     }
-    
   }
 }

@@ -1,62 +1,68 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-    CreateDateColumn,
-    BaseEntity,
-  } from 'typeorm'
-  
-  @Entity('course')
-	export class Course extends BaseEntity {
-		@PrimaryGeneratedColumn('uuid')
-		id!: string;
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  CreateDateColumn,
+  BaseEntity,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { User } from '.';
 
-		@Column()
-		author_id!: string;
+@Entity('course')
+export class Course extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-		@Column()
-		state!: string;
+  @Column()
+  author_id!: string;
 
-		@Column()
-		status!: string;
+  @Column()
+  state!: string;
 
-		@Column()
-        image!: string;
+  @Column()
+  status!: string;
 
-		@Column()
-		title!: string;
+  @Column()
+  image!: string;
 
-		@Column()
-		description!: string;
+  @Column()
+  title!: string;
 
-		@Column()
-		metadata!: string;
+  @Column()
+  description!: string;
 
-		@Column()
-		published_by!: string;
+  @Column()
+  metadata!: string;
 
-		@Column()
-		approved_by!: string;
+  @Column()
+  published_by!: string;
 
-		@CreateDateColumn({
-			type: 'timestamp',
-		})
-		published_at!: Date;
+  @Column()
+  approved_by!: string;
 
-		@CreateDateColumn({
-			type: 'timestamp',
-		})
-		approved_at!: Date;
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  published_at!: Date;
 
-		@CreateDateColumn({
-			type: 'timestamp',
-		})
-		created_at!: Date;
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  approved_at!: Date;
 
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  created_at!: Date;
 
-		@UpdateDateColumn({
-			type: 'timestamp',
-		})
-		updated_at!: Date;
-	}
+  @UpdateDateColumn({
+    type: 'timestamp',
+  })
+  updated_at!: Date;
+
+  @ManyToOne(() => User, (user) => user)
+  @JoinColumn({ name: 'author_id', referencedColumnName: 'id' })
+  author: User;
+}
