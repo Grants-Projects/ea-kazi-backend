@@ -17,13 +17,15 @@ export class ApplyJobService {
     }
     const jobApplication = await ApplyJob.findOne({
       where: {
-        user_id: application.user_id,
+        user_id: application.user.user_id,
+        job_id: application.job_id,
       },
     });
     if (jobApplication) {
       throw new Error('User already applied to Job!');
     }
+    delete application.user;
+    console.log('app', application);
     return await ApplyJob.create(application).save();
   };
-
 }

@@ -14,7 +14,7 @@ export class JobRepository {
         state: query?.state,
         status: query?.status,
       },
-      relations: ['skills', 'skills.skill'],
+      relations: ['skills', 'skills.skill', 'user'],
     });
   };
 
@@ -27,7 +27,7 @@ export class JobRepository {
       where: {
         id: jobId,
       },
-      relations: ['skills', 'skills.skill'],
+      relations: ['skills', 'skills.skill', 'user'],
     });
   };
 }
