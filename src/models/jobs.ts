@@ -86,7 +86,7 @@ export class Job extends BaseEntity {
   @OneToMany((type) => JobSkillCategory, (skill) => skill.job)
   skills: JobSkillCategory[];
 
-  // @ManyToOne(() => User, (user) => user.job)
-  // @JoinColumn({ name: 'recruiter_id', referencedColumnName: 'id' })
-  // user: User;
+  @ManyToOne(() => User, (user) => user.job)
+  @JoinColumn({ name: 'recruiter_id', referencedColumnName: 'id' })
+  user: User;
 }

@@ -66,6 +66,6 @@ export class User extends BaseEntity {
   })
   updated_at!: Date;
 
-  // @OneToMany(() => Job, (job) => job.user, { cascade: true })
-  // job: Job[];
+  @OneToMany(() => Job, (job) => job.user, { cascade: true })
+  job: Job[];
 }

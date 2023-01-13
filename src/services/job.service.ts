@@ -27,6 +27,19 @@ export class JobService {
 
   getAllJobs = async (query): Promise<Job[]> => {
     return await this.jobRepository.getAllJobs(query);
+    // const jobs = Job.createQueryBuilder('a').leftJoin('a.recruiter_id', 'recruiter').leftJoin('a.').select([
+    //   'a.state',
+    //   'a.status',
+    //   'a.title',
+    //   'a.description',
+    //   'a.location',
+    //   'a.image',
+    //   'a.expires_at',
+    //   'a.approved_by',
+    //   'a.approved_at',
+    //   'a.created_at',
+    //   'a.updated_at'
+    // ])
   };
 
   createJob = async (req: IRequest): Promise<Job> => {
@@ -95,7 +108,7 @@ export class JobService {
         'user.last_name',
         'a.status',
         'a.created_at',
-        'a.updated_at'
+        'a.updated_at',
       ])
       .where('a.job_id = :job', {
         job: job.jobId,
