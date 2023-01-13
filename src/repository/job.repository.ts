@@ -27,7 +27,7 @@ export class JobRepository {
       where: {
         id: jobId,
       },
-      relations: ['skills', 'skills.skill', ''],
+      relations: ['skills', 'skills.skill', 'user'],
     });
   };
 }
