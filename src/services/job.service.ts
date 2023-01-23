@@ -48,10 +48,19 @@ export class JobService {
       await this.userService.findUser(req.body.user.userId);
       job.state = StateConstants.DRAFT;
       job.status = StatusConstants.NEW;
-      job.recruiterId = req.body.user.userId;
-      delete job.recruiter_id;
-      console.log(job);
-      let create_job = await Job.create(job).save();
+      //job.recruiter_id = req.body.user.userId;
+      // delete job.recruiter_id;
+      const createJob = {
+        title: req.body.title,
+        description: req.body.description,
+        skill: req.body.skill,
+        culture: req.body.culture,
+        location: req.body.location,
+        image: req.body.image,
+        recruiterId: req.body.user.userId,
+      };
+      console.log(createJob);
+      let create_job = await Job.create(createJob).save();
       let skill = await Skills.findOne({
         where: {
           id: req.body.skill,

@@ -19,7 +19,7 @@ export class JobRepository {
   };
 
   createJob = async (job: Partial<Job>) => {
-    return await jobRepository.create(job).save();
+    return await jobRepository.save(jobRepository.create(job));
   };
 
   getJobDetails = async (jobId) => {
