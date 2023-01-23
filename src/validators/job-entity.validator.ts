@@ -6,16 +6,6 @@ import validate from '../lib/validate';
 class JobEntityValidator {
   createJobEntity = validate(
     checkSchema({
-      recruiter_id: {
-        in: ['body'],
-        isString: {
-          errorMessage: 'Recruiter Id must be a string',
-        },
-        isUUID: {
-          errorMessage: 'Recruiter Id  must be of a valid UUID type',
-        },
-        trim: true,
-      },
       title: {
         in: ['body'],
         isString: {
