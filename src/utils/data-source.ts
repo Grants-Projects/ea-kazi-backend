@@ -11,6 +11,7 @@ import {
   UserRole,
   Skills,
   JobSkillCategory,
+  ApplyCourse,
 } from '../models';
 import {
   User1659482181387,
@@ -33,7 +34,8 @@ import {
   UpdateJob1660219541659,
   UpdateJob1660219541660,
   applyJob1665482292448,
-  UpdateCourses1665482292449
+  UpdateCourses1665482292449,
+  ApplyCourses1665482292450,
 } from '../database/migrations';
 import { ApplyJob } from '../models/apply_job';
 
@@ -65,7 +67,8 @@ export const AppDataSource = new DataSource({
     UserRole,
     Skills,
     JobSkillCategory,
-    ApplyJob
+    ApplyJob,
+    ApplyCourse,
   ],
   migrations: [
     User1659482181387,
@@ -88,7 +91,8 @@ export const AppDataSource = new DataSource({
     UpdateJob1660219541659,
     UpdateJob1660219541660,
     applyJob1665482292448,
-    UpdateCourses1665482292449
+    UpdateCourses1665482292449,
+    ApplyCourses1665482292450,
   ],
   // subscribers: ['src/subscribers/**/*{.ts,.js}'],
 });
