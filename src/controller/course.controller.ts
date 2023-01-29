@@ -23,7 +23,6 @@ export class CourseController {
 
   createCourse = async (req: IRequest, res: IResponse) => {
     try {
-      
       req.body.author_id = req.body.user.userId;
       const course = await this.courseService.createCourse(req);
       return res.ok(course, 'Course created successfully');
@@ -48,10 +47,28 @@ export class CourseController {
   };
 
   getCourses = async (req: IRequest, res: IResponse) => {
-    try{
-     const course = await this.courseService.getCourses(req.body.user.userId);
+    try {
+      const course = await this.courseService.getCourses(req.body.user.userId);
       return res.ok(course, 'Course fetched successfully');
-    }catch(error){
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching course details'
+      );
     }
-  }
+  };
+  applyCourse = async (req: IRequest, res: IResponse) => {
+    try {
+      const apply = await this.courseService.applyCourse(
+        req.body.course_id,
+        req.body.user.userId
+      );
+      return res.ok(apply, 'Course applied successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching course details'
+      );
+    }
+  };
 }

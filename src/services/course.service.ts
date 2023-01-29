@@ -2,7 +2,7 @@
 
 import { CourseRepository } from '../repository/course.repository';
 import { injectable } from 'tsyringe';
-import { Course } from '../models';
+import { Course, ApplyCourse } from '../models';
 import { IRequest } from '../common/http.interface';
 import StateConstants from '../lib/state-constants';
 import StatusConstants from '../lib/status-constants';
@@ -116,5 +116,12 @@ export class CourseService {
       .getMany();
 
     return courses;
+  };
+
+  applyCourse = async (courseId: string, userId: string) => {
+    return await ApplyCourse.create({
+      courseId,
+      userId,
+    }).save();
   };
 }

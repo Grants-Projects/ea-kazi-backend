@@ -7,3 +7,4 @@ export * from './roles';
 export * from './user_role';
 export * from './skills';
 export * from './job_skill_category';
+export * from './apply_course';
