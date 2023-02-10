@@ -3,15 +3,17 @@
 require("dotenv").config();
 
 export const config = {
-  appname: "eakazi",
+  appname: 'eakazi',
   web: {
-    port: process.env.PORT || "8082",
+    port: process.env.PORT || '8082',
     header_name: process.env.HEADER_NAME || 'x-auth-token',
-    jwt_secret: process.env.JWT_SECRET || "myKXAXZXI902@@#@50381.C03",
-    jwt_reset_secret: process.env.JWT_RESET_SECRET || "myKXA938u902.XI902@@#@50381.C03",
+    jwt_secret: process.env.JWT_SECRET || 'myKXAXZXI902@@#@50381.C03',
+    jwt_reset_secret:
+      process.env.JWT_RESET_SECRET || 'myKXA938u902.XI902@@#@50381.C03',
     jwt_duration: process.env.JWT_DURATION || '1h',
     jwt_email_duration: process.env.JWT_EMAIL_DURATION || '10m',
-    jwt_activation: process.env.JWT_ACCOUNT_ACTIVATION,
+    jwt_activation:
+      process.env.JWT_ACCOUNT_ACTIVATION || 'myACRRTTTKXAXZXI902@@#@50381.C03',
     accessTokenExpiresIn: 15,
     refreshTokenExpiresIn: 60,
   },
@@ -21,9 +23,9 @@ export const config = {
     sendgrid_api_key: process.env.SENDGRID_API_KEY,
   },
   redis: {
-    host: process.env.REDIS_HOST || "localhost",
+    host: process.env.REDIS_HOST || 'localhost',
     port: parseInt(process.env.REDIS_PORT) || 6379,
     db: parseInt(process.env.REDIS_DB) || 0,
-    ttl:    parseInt(process.env.REDIS_DB) * 60 || 60 * 60,
+    ttl: parseInt(process.env.REDIS_DB) * 60 || 60 * 60,
   },
 };

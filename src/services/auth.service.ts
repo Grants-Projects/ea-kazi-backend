@@ -71,7 +71,31 @@ export class AuthService {
       });
 
       delete user.password;
-      return res.ok(user, `User has been registered`);
+
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        config.web.jwt_activation,
+        { expiresIn: config.web.jwt_email_duration }
+      );
+
+      const emailData: IEmail = {
+        subject: 'Account Verification',
+        template_name: 'sign_verify',
+        recipient_email: user.email,
+        short_response_message:
+          'verify your account :) . The link will expire in 10 minutes',
+        action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
+      };
+
+      const sent = await this.emailService.sendEmail(emailData);
+
+      if (sent) {
+        return res.ok(
+          user,
+          'An Email has been sent to ' +
+            `${user.email}. Please follow the instructions to ${emailData.short_response_message}`
+        );
+      }
     } catch (error) {
       return res.forbidden(
         error,
@@ -132,14 +156,15 @@ export class AuthService {
         action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
       };
 
-      await this.emailService.sendEmail(
-        res,
-        emailData.subject,
-        emailData.template_name,
-        emailData.recipient_email,
-        emailData.short_response_message,
-        emailData.action_url
-      );
+      const sent = await this.emailService.sendEmail(emailData);
+
+      if (sent) {
+        return res.ok(
+          user,
+          'An Email has been sent to ' +
+            `${user.email}. Please follow the instructions to ${emailData.short_response_message}`
+        );
+      }
     } catch (err) {
       return res.forbidden(
         err,
@@ -155,6 +180,10 @@ export class AuthService {
 
       if (!user) {
         return res.notFound(null, 'Invalid email or password');
+      }
+
+      if (!user.verified_at) {
+        return res.unauthorized(null, 'Account is not verified!');
       }
 
       const token: any = await TokenService.generateUserToken(
@@ -234,14 +263,7 @@ export class AuthService {
         action_url: `${config.sendgrid.client_url}/reset-password/?token=${token}`,
       };
 
-      await this.emailService.sendEmail(
-        res,
-        emailData.subject,
-        emailData.template_name,
-        emailData.recipient_email,
-        emailData.short_response_message,
-        emailData.action_url
-      );
+      await this.emailService.sendEmail(emailData);
     } catch (error) {
       return res.serverError(error, 'Something went wrong. Please try again.');
     }
