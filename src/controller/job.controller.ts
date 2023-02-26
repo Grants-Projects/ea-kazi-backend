@@ -48,11 +48,11 @@ export class JobController {
 
   recruiterJobList = async (req: IRequest, res: IResponse) => {
     try {
-      console.log("here wow")
+      console.log('here wow');
       const job = await this.jobService.recruiterJobList(req.body);
       return res.ok(job, 'Jobs fetched successfully');
     } catch (error) {
-      console.log("errerr", error)
+      console.log('errerr', error);
       return res.serverError(
         error,
         error.message || 'An error occured while fetching list of jobs'
@@ -66,6 +66,34 @@ export class JobController {
         await this.jobService.getJobApplications(req.params),
         'Job fetched successfully'
       );
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching job info'
+      );
+    }
+  };
+
+  getAppliedJobs = async (req: IRequest, res: IResponse) => {
+    try {
+      let response = await this.jobService.getAppliedJobs(req.body.user.userId);
+      return res.ok(response, 'Applied job fetched successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching job info'
+      );
+    }
+  };
+
+  updateJobDetails = async (req: IRequest, res: IResponse) => {
+    try {
+      let response = await this.jobService.updatJobDetails(
+        req.body,
+        req.params.jobId
+      );
+
+      return res.ok(response, 'Job updated successfully');
     } catch (error) {
       return res.serverError(
         error,

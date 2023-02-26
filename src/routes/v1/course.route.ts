@@ -17,4 +17,5 @@ router.post(
 );
 router.get('/:courseId', authMiddleware(), courseController.getCourseDetails);
 router.post('/apply', authMiddleware(), courseController.applyCourse);
+router.put('/:courseId', authMiddleware(), courseController.editCourse);
 export default router;

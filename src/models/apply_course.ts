@@ -9,6 +9,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { CourseStatus } from '../common/types/status';
+import { Course } from './courses';
+import { Job } from './jobs';
 import { User } from './users';
 
 @Entity('apply_courses')
@@ -44,4 +46,8 @@ export class ApplyCourse extends BaseEntity {
   @ManyToOne(() => User, (user) => user)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
+  
+  @ManyToOne(() => Course, (course) => course)
+  @JoinColumn({ name: 'course_id', referencedColumnName: 'id' })
+  course: Course;
 }

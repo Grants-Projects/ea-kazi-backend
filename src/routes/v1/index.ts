@@ -7,6 +7,7 @@ import SkillRouter from './skills.route';
 import UserRouter from './user.route';
 import ApplyJobRouter from './apply_job.route';
 import MeRouter from './me.route';
+import RecruiterRoute from './recruiter.route';
 
 const AppRouter: Router = express.Router();
 
@@ -18,5 +19,6 @@ AppRouter.use('/skills', SkillRouter);
 AppRouter.use('/user', UserRouter);
 AppRouter.use('/apply-job', ApplyJobRouter);
 AppRouter.use('/me', MeRouter);
+AppRouter.use('/recruiter', RecruiterRoute);
 
 export default AppRouter;

@@ -18,5 +18,11 @@ router.post(
 );
 router.get('/:jobId', authMiddleware(), jobController.getJobDetails);
 
-router.get('/:jobId/applications', authMiddleware(), jobController.getJobApplications);
+router.get(
+  '/:jobId/applications',
+  authMiddleware(),
+  jobController.getJobApplications
+);
+
+router.put('/:jobId', authMiddleware(), jobController.updateJobDetails);
 export default router;

@@ -6,7 +6,7 @@ import { Course, ApplyCourse } from '../models';
 import { IRequest } from '../common/http.interface';
 import StateConstants from '../lib/state-constants';
 import StatusConstants from '../lib/status-constants';
-import { BadRequest } from '../utils/errors/ErrorHandlers';
+import { BadRequest, ResourceNotFoundError } from '../utils/errors/ErrorHandlers';
 
 @injectable()
 export class CourseService {
@@ -123,5 +123,80 @@ export class CourseService {
       courseId,
       userId,
     }).save();
+  };
+
+  getAppliedCourses = async (userId: string) => {
+    return await ApplyCourse.createQueryBuilder('a')
+      .leftJoin('a.user', 'user')
+      .leftJoin('a.course', 'course')
+      .leftJoin('course.author', 'author')
+      .select([
+        'a.id',
+        'a.userId',
+        'a.status',
+        'a.createdAt',
+        'user.id',
+        'user.email',
+        'user.first_name',
+        'user.last_name',
+        'course.id',
+        'course.author_id',
+        'course.state',
+        'course.status',
+        'course.title',
+        'course.image',
+        'course.description',
+        'course.metadata',
+        'course.published_by',
+        'course.approved_by',
+        'course.created_at',
+        'course.author',
+        'author.id',
+        'author.email',
+        'author.first_name',
+        'author.last_name',
+      ])
+      .where('a.userId= :userId', {
+        userId,
+      })
+      .getMany();
+  };
+
+  editCourse = async (data: any, courseId: string) => {
+    const user_id = data.user.userId;
+    delete data.user;
+    console.log('data', user_id);
+    const courseToUpdate = await Course.findOne({
+      where: {
+        id: courseId,
+        author_id: user_id,
+      },
+    });
+    if (!courseToUpdate) {
+      throw new ResourceNotFoundError({
+        data: null,
+        message:
+          'Course not found. You may want to be sure that you created this course',
+      });
+    }
+    if (
+      courseToUpdate.status == 'PUBLISHED' ||
+      courseToUpdate.status == 'EXPIRED' ||
+      courseToUpdate.status === 'COMPLETED'
+    ) {
+      throw new BadRequest({
+        data: null,
+        message:
+          'Course cannot be updated - either it has expired, published or completed',
+      });
+    }
+
+    courseToUpdate.title = data.title;
+    courseToUpdate.image = data.image;
+    courseToUpdate.description = data.description;
+    courseToUpdate.status = data.status;
+    courseToUpdate.state = data.state;
+    await Course.save(courseToUpdate);
+    return courseToUpdate;
   };
 }
