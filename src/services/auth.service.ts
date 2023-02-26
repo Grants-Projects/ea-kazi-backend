@@ -18,6 +18,8 @@ import { RoleRepository } from '../repository/role.respository';
 import { UserRoleRepository } from '../repository/user.role.repository';
 import { use } from 'passport';
 import { UserRole } from '../constants/role.const';
+import { PasswordReset } from '../models/password_reset';
+import moment from 'moment';
 
 @injectable()
 export class AuthService {
@@ -71,7 +73,31 @@ export class AuthService {
       });
 
       delete user.password;
-      return res.ok(user, `User has been registered`);
+
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        config.web.jwt_activation,
+        { expiresIn: config.web.jwt_email_duration }
+      );
+
+      const emailData: IEmail = {
+        subject: 'Account Verification',
+        template_name: 'sign_verify',
+        recipient_email: user.email,
+        short_response_message:
+          'verify your account :) . The link will expire in 10 minutes',
+        action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
+      };
+
+      const sent = await this.emailService.sendEmail(emailData);
+
+      if (sent) {
+        return res.ok(
+          user,
+          'An Email has been sent to ' +
+            `${user.email}. Please follow the instructions to ${emailData.short_response_message}`
+        );
+      }
     } catch (error) {
       return res.forbidden(
         error,
@@ -132,14 +158,15 @@ export class AuthService {
         action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
       };
 
-      await this.emailService.sendEmail(
-        res,
-        emailData.subject,
-        emailData.template_name,
-        emailData.recipient_email,
-        emailData.short_response_message,
-        emailData.action_url
-      );
+      const sent = await this.emailService.sendEmail(emailData);
+
+      if (sent) {
+        return res.ok(
+          user,
+          'An Email has been sent to ' +
+            `${user.email}. Please follow the instructions to ${emailData.short_response_message}`
+        );
+      }
     } catch (err) {
       return res.forbidden(
         err,
@@ -155,6 +182,10 @@ export class AuthService {
 
       if (!user) {
         return res.notFound(null, 'Invalid email or password');
+      }
+
+      if (!user.verified_at) {
+        return res.unauthorized(null, 'Account is not verified!');
       }
 
       const token: any = await TokenService.generateUserToken(
@@ -219,56 +250,85 @@ export class AuthService {
         );
       }
 
-      const token = jwt.sign(
-        { id: user.id, email: user.email },
-        config.web.jwt_reset_secret,
-        { expiresIn: config.web.jwt_email_duration }
-      );
-
-      const emailData: IEmail = {
-        subject: 'Password Reset link',
-        template_name: 'reset',
-        recipient_email: user.email,
-        short_response_message:
-          'reset your password. The link will expire in 10 minutes',
-        action_url: `${config.sendgrid.client_url}/reset-password/?token=${token}`,
+      const userExist = await PasswordReset.find({
+        where: {
+          email: email,
+        },
+      });
+      const format = 'YYYY-MM-DD HH:mm:ss';
+      const date = moment(Date.now() + 3600000).format(format);
+      const input = {
+        email,
+        otp: `${Math.floor(1000 + Math.random() * 9000)}`,
+        expiresAt: date,
       };
 
-      await this.emailService.sendEmail(
-        res,
-        emailData.subject,
-        emailData.template_name,
-        emailData.recipient_email,
-        emailData.short_response_message,
-        emailData.action_url
-      );
+      if (userExist && userExist.length) {
+        await PasswordReset.update({ email }, { ...input });
+      } else {
+        await PasswordReset.create({ ...input }).save();
+      }
+
+      const emailData: IEmail = {
+        subject: 'Password Reset OTP',
+        template_name: 'reset',
+        recipient_email: user.email,
+        short_response_message: 'reset your password. The Otp will expire in 1 hour',
+        email_data: `${input.otp}`,
+      };
+
+      const sent = await this.emailService.sendEmail(emailData);
+
+      if (sent) {
+        return res.ok(
+          user,
+          'An Email has been sent to ' +
+            `${user.email}. Please follow the instructions to ${emailData.short_response_message}`
+        );
+      }
     } catch (error) {
       return res.serverError(error, 'Something went wrong. Please try again.');
     }
   };
 
   resetPassword = async (req: IRequest, res: IResponse) => {
-    const { token }: any = req.query;
-    const { newPassword } = req.body;
-    if (token) {
-      jwt.verify(token, config.web.jwt_reset_secret, async (err, decoded) => {
-        if (err) {
-          return res.forbidden(
-            { err },
-            'Reset Password link expired. Please try again'
-          );
-        }
-        const property = await this.userRepository.findUserById(decoded?.id),
-          password = await bcrypt.hash(newPassword, 12);
-        await this.userRepository.saveUser({
-          ...property, // existing fields
-          password, // updated fields
-        });
+    const { email, otp, newPassword } = req.body;
 
-        return res.ok(null, 'Password reset successful. Please Login!');
+    try {
+      const userExist = await PasswordReset.find({
+        where: {
+          email: email,
+          otp,
+        },
       });
-    } else {
-      return res.serverError(null, 'Something went wrong. Please try again.');
+
+      if (!userExist || userExist.length <= 0) {
+        throw new Error('Invalid OTP. Please input valid OTP sent to your email');
+      }
+
+      if (!userExist || userExist.length <= 0) {
+        throw new Error(
+          'Invalid OTP. Please generate new OTP with your correct email address'
+        );
+      }
+
+      if (userExist[0].expiresAt.getTime() < new Date().getTime()) {
+        throw new Error('OTP expired!. Please request a new one');
+      }
+
+      const property = await this.userRepository.findUserByEmail(email),
+        password = await bcrypt.hash(newPassword, 12);
+      await this.userRepository.saveUser({
+        ...property, // existing fields
+        password, // updated fields
+      });
+
+      return res.ok(null, 'Password reset successful');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error?.message || 'Something went wrong. Please try again.'
+      );
     }
   };
 }
