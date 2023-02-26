@@ -13,6 +13,7 @@ export class UserService {
       where: {
         id,
       },
+      relations: ['job', 'course'],
     });
     if (user) return user;
     throw new ResourceNotFoundError({

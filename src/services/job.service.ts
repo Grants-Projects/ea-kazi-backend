@@ -14,6 +14,7 @@ import {
   ServerError,
   UnauthorizedAccess,
   BadRequest,
+  ResourceNotFoundError,
 } from '../utils/errors/ErrorHandlers';
 import { UserService } from './user.service';
 import { ApplyJob } from '../models/apply_job';
@@ -124,5 +125,79 @@ export class JobService {
       })
       .getMany();
     return users;
+  };
+
+  getAppliedJobs = async (userId): Promise<any> => {
+    return await ApplyJob.createQueryBuilder('a')
+      .leftJoin('a.user', 'user')
+      .leftJoin('a.job', 'job')
+      .leftJoin('job.skills', 'skills')
+      .leftJoin('skills.skill', 'skill')
+      .select([
+        'a.id',
+        'a.job_id',
+        'job.state',
+        'job.status',
+        'job.title',
+        'job.description',
+        'job.location',
+        'job.image',
+        'job.createdAt',
+        'user.id',
+        'user.email',
+        'user.first_name',
+        'user.last_name',
+        'a.status',
+        'a.created_at',
+        'a.updated_at',
+        'skills.skillId',
+        'skill.id',
+        'skill.title',
+        'skill.description',
+        'skill.thumbnail_image',
+        'skill.image',
+        'skill.is_active',
+        'skill.created_at',
+      ])
+      .where('a.user_id = :userId', {
+        userId: userId,
+      })
+      .getMany();
+  };
+
+  updatJobDetails = async (data: any, jobId: string) => {
+    const userId = data.user.userId;
+    delete data.user;
+    const jobToUpdate = await Job.findOne({
+      where: {
+        id: jobId,
+        recruiterId: userId,
+      },
+    });
+
+    if (!jobToUpdate) {
+      throw new ResourceNotFoundError({
+        data: null,
+        message: 'Job not found. You may want to be sure that you created this job',
+      });
+    }
+
+    if (jobToUpdate.status == 'EXPIRED' || jobToUpdate.status == 'COMPLETED') {
+      throw new BadRequest({
+        data: null,
+        message: 'Job cannot be updated - either it has expired or completed',
+      });
+    }
+
+    jobToUpdate.title = data.title;
+    jobToUpdate.image = data.image;
+    jobToUpdate.description = data.description;
+    jobToUpdate.status = data.status;
+    jobToUpdate.state = data.state;
+    jobToUpdate.culture = data.culture;
+    jobToUpdate.location = data.location;
+
+    await Job.save(jobToUpdate);
+    return jobToUpdate;
   };
 }

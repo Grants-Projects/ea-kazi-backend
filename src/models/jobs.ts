@@ -10,6 +10,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { JobSkillCategory, User } from '.';
+import { ApplyJob } from './apply_job';
 
 export enum Culture {
   REMOTE = 'Remote',
@@ -89,4 +90,7 @@ export class Job extends BaseEntity {
   @ManyToOne(() => User, (user) => user.job)
   @JoinColumn({ name: 'recruiter_id', referencedColumnName: 'id' })
   user: User;
+
+  @OneToMany(() => ApplyJob, (applyJob) => applyJob.job, { cascade: true })
+  applyJob: ApplyJob[];
 }

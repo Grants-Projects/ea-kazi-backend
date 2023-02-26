@@ -71,4 +71,32 @@ export class CourseController {
       );
     }
   };
+  getAppliedCourses = async (req: IRequest, res: IResponse) => {
+    try {
+      const response = await this.courseService.getAppliedCourses(
+        req.body.user.userId
+      );
+      return res.ok(response, 'Fetched applied courses successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching applied courses'
+      );
+    }
+  };
+
+  editCourse = async (req: IRequest, res: IResponse) => {
+    try {
+      const response = await this.courseService.editCourse(
+        req.body,
+        req.params.courseId
+      );
+      return res.ok(response, 'course updated successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while editing courses'
+      );
+    }
+  };
 }

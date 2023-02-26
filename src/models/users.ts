@@ -10,7 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import bcrypt from 'bcryptjs';
-import { Job } from '.';
+import { Job, Course } from '.';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -68,4 +68,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Job, (job) => job.user, { cascade: true })
   job: Job[];
+
+  @OneToMany(() => Course, (course) => course.author, {cascade: true})
+  course: Course[]
 }
