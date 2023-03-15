@@ -9,4 +9,5 @@ const categoryController: CourseCategoryController = container.resolve(
 );
 
 router.post('/', authMiddleware(), categoryController.createCourseCategory);
+router.get('/', categoryController.getCourseCategory);
 export default router;

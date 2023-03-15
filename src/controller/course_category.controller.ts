@@ -18,4 +18,19 @@ export class CourseCategoryController {
       );
     }
   };
+
+  getCourseCategory = async (req: IRequest, res: IResponse) => {
+    try {
+      const category = await this.courseCategory.getCourseCategory(
+        req.query.category_id
+      );
+
+      return res.ok(category, 'Category(s) fetched successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching category(s)'
+      );
+    }
+  };
 }

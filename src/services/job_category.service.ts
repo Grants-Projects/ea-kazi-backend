@@ -21,4 +21,17 @@ export class JobCategoryService {
     };
     return await JobCategory.create({ ...createCategory }).save();
   };
+
+  getJobCategory = async (
+    category_id: any
+  ): Promise<JobCategory | JobCategory[]> => {
+    if (category_id) {
+      return await JobCategory.findOne({
+        where: {
+          id: category_id,
+        },
+      });
+    }
+    return await JobCategory.find();
+  };
 }

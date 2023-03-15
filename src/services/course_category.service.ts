@@ -21,4 +21,17 @@ export class CourseCategoryService {
     };
     return await CourseCategory.create({ ...createCategory }).save();
   };
+
+  getCourseCategory = async (
+    category_id: any
+  ): Promise<CourseCategory | CourseCategory[]> => {
+    if (category_id) {
+      return await CourseCategory.findOne({
+        where: {
+          id: category_id,
+        },
+      });
+    }
+    return await CourseCategory.find();
+  };
 }
