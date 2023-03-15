@@ -59,6 +59,7 @@ export class JobService {
         location: req.body.location,
         image: req.body.image,
         recruiterId: req.body.user.userId,
+        job_category_id: req.body.job_category_id,
       };
       console.log(createJob);
       let create_job = await Job.create(createJob).save();

@@ -11,7 +11,8 @@ import {
   notFound,
   serverError,
   badGateway,
-} from "./types";
+  unproccessable,
+} from './types';
 
 export default (_req: IRequest, res: IResponse, next: INext) => {
   const responseTypes = {
@@ -22,6 +23,7 @@ export default (_req: IRequest, res: IResponse, next: INext) => {
     forbidden,
     notFound,
     serverError,
+    unproccessable,
     badGateway,
   };
 

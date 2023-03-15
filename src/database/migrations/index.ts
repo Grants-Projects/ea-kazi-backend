@@ -21,3 +21,7 @@ export * from './1665482292448-apply_job';
 export * from './1665482292449-update_courses';
 export * from './1665482292450-apply_courses';
 export * from './1676794464901-password_reset';
+export * from './1678814182993-job_category';
+export * from './1678814353681-course_category';
+export * from './1678877657252-update-course';
+export * from './1678878259951-update-job';

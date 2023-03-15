@@ -5,8 +5,9 @@ import { CourseController } from '../../controller/course.controller';
 import authMiddleware from '../../middleware/auth.middleware';
 import CourseEntityValidator from '../../validators/course-entity.validator';
 
-const courseController: any = container.resolve(CourseController);
-const courseValidator: any = container.resolve(CourseEntityValidator);
+const courseController: CourseController = container.resolve(CourseController);
+const courseValidator: CourseEntityValidator =
+  container.resolve(CourseEntityValidator);
 
 router.get('/', courseController.getAllCourses);
 router.post(
@@ -16,6 +17,11 @@ router.post(
   courseController.createCourse
 );
 router.get('/:courseId', authMiddleware(), courseController.getCourseDetails);
+router.get(
+  '/:courseId/applications',
+  authMiddleware(),
+  courseController.getCourseApplications
+);
 router.post('/apply', authMiddleware(), courseController.applyCourse);
 router.put('/:courseId', authMiddleware(), courseController.editCourse);
 export default router;

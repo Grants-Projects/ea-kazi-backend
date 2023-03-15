@@ -81,6 +81,17 @@ export function serverError(
   });
 }
 
+export function unproccessable(
+  data = null,
+  message: string = ResponseMessages.ERROR_OCURRED
+) {
+  logger.error(data);
+  this.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+    status: ResponseMessages.STATUS_ERROR,
+    message,
+  });
+}
+
 export function badGateway(
   data = null,
   message: string = ResponseMessages.BAD_GATEWAY

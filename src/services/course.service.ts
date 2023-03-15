@@ -199,4 +199,35 @@ export class CourseService {
     await Course.save(courseToUpdate);
     return courseToUpdate;
   };
+
+  getCourseApplications = async (course: any): Promise<ApplyCourse[]> => {
+    const courseApplied = await Course.findOne({
+      where: {
+        id: course.courseId,
+      },
+    });
+
+    if (!courseApplied) {
+      throw new Error('Course does not exist.!');
+    }
+
+    const users = await ApplyCourse.createQueryBuilder('a')
+      .leftJoin('a.user', 'user')
+      .select([
+        'a.id',
+        'a.course_id',
+        'user.id',
+        'user.email',
+        'user.first_name',
+        'user.last_name',
+        'a.status',
+        'a.created_at',
+        'a.updated_at',
+      ])
+      .where('a.course_id = :course', {
+        course: course.courseId,
+      })
+      .getMany();
+    return users;
+  };
 }
