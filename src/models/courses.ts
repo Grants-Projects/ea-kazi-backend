@@ -9,6 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from '.';
+import { CourseCategory } from './course_category';
 
 @Entity('course')
 export class Course extends BaseEntity {
@@ -17,6 +18,9 @@ export class Course extends BaseEntity {
 
   @Column()
   author_id!: string;
+
+  @Column()
+  course_category_id!: string;
 
   @Column()
   state!: string;
@@ -61,6 +65,10 @@ export class Course extends BaseEntity {
     type: 'timestamp',
   })
   updated_at!: Date;
+
+  @ManyToOne(() => CourseCategory, (category) => category)
+  @JoinColumn({ name: 'course_category_id', referencedColumnName: 'id' })
+  course_category: CourseCategory;
 
   @ManyToOne(() => User, (user) => user)
   @JoinColumn({ name: 'author_id', referencedColumnName: 'id' })

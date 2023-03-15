@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { JobSkillCategory, User } from '.';
 import { ApplyJob } from './apply_job';
+import { JobCategory } from './job_category';
 
 export enum Culture {
   REMOTE = 'Remote',
@@ -28,6 +29,9 @@ export class Job extends BaseEntity {
     name: 'recruiter_id',
   })
   recruiterId!: string;
+
+  @Column()
+  job_category_id!: string;
 
   @Column()
   state!: string;
@@ -83,6 +87,10 @@ export class Job extends BaseEntity {
     name: 'updated_at',
   })
   updatedAt!: Date;
+
+  @ManyToOne(() => JobCategory, (category) => category)
+  @JoinColumn({ name: 'job_category_id', referencedColumnName: 'id' })
+  job_category: JobCategory;
 
   @OneToMany((type) => JobSkillCategory, (skill) => skill.job)
   skills: JobSkillCategory[];

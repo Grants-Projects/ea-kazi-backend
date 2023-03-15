@@ -8,6 +8,8 @@ import UserRouter from './user.route';
 import ApplyJobRouter from './apply_job.route';
 import MeRouter from './me.route';
 import RecruiterRoute from './recruiter.route';
+import CourseCategoryRoute from './course_category.route';
+import JobCategoryRoute from './job_category.route';
 
 const AppRouter: Router = express.Router();
 
@@ -20,5 +22,7 @@ AppRouter.use('/user', UserRouter);
 AppRouter.use('/apply-job', ApplyJobRouter);
 AppRouter.use('/me', MeRouter);
 AppRouter.use('/recruiter', RecruiterRoute);
+AppRouter.use('/category/course', CourseCategoryRoute);
+AppRouter.use('/category/job', JobCategoryRoute);
 
 export default AppRouter;

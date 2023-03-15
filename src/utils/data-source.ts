@@ -37,9 +37,15 @@ import {
   UpdateCourses1665482292449,
   ApplyCourses1665482292450,
   PasswordReset1676794464901,
+  jobCategory1678814182993,
+  courseCategory1678814353681,
+  updateCourse1678877657252,
+  updateJob1678878259951,
 } from '../database/migrations';
 import { ApplyJob } from '../models/apply_job';
 import { PasswordReset } from '../models/password_reset';
+import { JobCategory } from '../models/job_category';
+import { CourseCategory } from '../models/course_category';
 
 // const mysqlConfig = configuration.get<{
 //   host: string;
@@ -72,6 +78,8 @@ export const AppDataSource = new DataSource({
     ApplyJob,
     ApplyCourse,
     PasswordReset,
+    JobCategory,
+    CourseCategory,
   ],
   migrations: [
     User1659482181387,
@@ -97,6 +105,10 @@ export const AppDataSource = new DataSource({
     UpdateCourses1665482292449,
     ApplyCourses1665482292450,
     PasswordReset1676794464901,
+    courseCategory1678814353681,
+    updateCourse1678877657252,
+    jobCategory1678814182993,
+    updateJob1678878259951,
   ],
   // subscribers: ['src/subscribers/**/*{.ts,.js}'],
 });
