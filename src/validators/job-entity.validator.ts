@@ -19,6 +19,15 @@ class JobEntityValidator {
         },
         trim: true,
       },
+      job_category_id: {
+        in: ['body'],
+        notEmpty: {
+          errorMessage: 'job category id field is required',
+        },
+        isUUID: {
+          errorMessage: 'job category Id must be of a valid UUID type',
+        },
+      },
       description: {
         in: ['body'],
         isString: {

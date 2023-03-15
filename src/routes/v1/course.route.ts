@@ -5,8 +5,9 @@ import { CourseController } from '../../controller/course.controller';
 import authMiddleware from '../../middleware/auth.middleware';
 import CourseEntityValidator from '../../validators/course-entity.validator';
 
-const courseController: any = container.resolve(CourseController);
-const courseValidator: any = container.resolve(CourseEntityValidator);
+const courseController: CourseController = container.resolve(CourseController);
+const courseValidator: CourseEntityValidator =
+  container.resolve(CourseEntityValidator);
 
 router.get('/', courseController.getAllCourses);
 router.post(
