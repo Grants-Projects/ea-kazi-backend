@@ -99,4 +99,18 @@ export class CourseController {
       );
     }
   };
+
+  getCourseApplications = async (req: IRequest, res: IResponse) => {
+    try {
+      return res.ok(
+        await this.courseService.getCourseApplications(req.params),
+        'Course apllicants fetched successfully'
+      );
+    } catch (error) {
+      return res.serverError(
+        error,
+        error.message || 'An error occured while fetching Course apllicants'
+      );
+    }
+  };
 }
