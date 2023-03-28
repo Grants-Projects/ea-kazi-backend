@@ -184,9 +184,10 @@ export class AuthService {
         return res.notFound(null, 'Invalid email or password');
       }
 
-      if (!user.verified_at) {
-        return res.unauthorized(null, 'Account is not verified!');
-      }
+      //pending when account verification has been changed to using OTP
+      // if (!user.verified_at) {
+      //   return res.unauthorized(null, 'Account is not verified!');
+      // }
 
       const token: any = await TokenService.generateUserToken(
         {
