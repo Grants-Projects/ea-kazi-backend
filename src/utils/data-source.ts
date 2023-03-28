@@ -41,11 +41,13 @@ import {
   courseCategory1678814353681,
   updateCourse1678877657252,
   updateJob1678878259951,
+  userVerification1679986275877,
 } from '../database/migrations';
 import { ApplyJob } from '../models/apply_job';
 import { PasswordReset } from '../models/password_reset';
 import { JobCategory } from '../models/job_category';
 import { CourseCategory } from '../models/course_category';
+import { UserVerification } from '../models/user_verification';
 
 // const mysqlConfig = configuration.get<{
 //   host: string;
@@ -80,6 +82,7 @@ export const AppDataSource = new DataSource({
     PasswordReset,
     JobCategory,
     CourseCategory,
+    UserVerification,
   ],
   migrations: [
     User1659482181387,
@@ -109,6 +112,7 @@ export const AppDataSource = new DataSource({
     updateCourse1678877657252,
     jobCategory1678814182993,
     updateJob1678878259951,
+    userVerification1679986275877,
   ],
   // subscribers: ['src/subscribers/**/*{.ts,.js}'],
 });

@@ -1,12 +1,9 @@
 /** @format */
 
 import { User } from '../models';
-import { CookieOptions } from 'express';
 import { UserRepository } from '../repository/user.repository';
 import { injectable } from 'tsyringe';
-import { config } from '../config';
 import { RedisCache } from '../lib/redis-cache';
-import { signJwt, verifyJwt } from '../utils/jwt';
 import { LoggerHelper } from '../helper/logger';
 import { IRequest, IResponse } from '../common/http.interface';
 import * as jwt from 'jsonwebtoken';
@@ -16,10 +13,10 @@ import bcrypt from 'bcryptjs';
 import { TokenService } from './token.service';
 import { RoleRepository } from '../repository/role.respository';
 import { UserRoleRepository } from '../repository/user.role.repository';
-import { use } from 'passport';
 import { UserRole } from '../constants/role.const';
 import { PasswordReset } from '../models/password_reset';
-import moment from 'moment';
+import Helpers from '../helper/helpers';
+import { UserVerification } from '../models/user_verification';
 
 @injectable()
 export class AuthService {
@@ -74,19 +71,27 @@ export class AuthService {
 
       delete user.password;
 
-      const token = jwt.sign(
-        { id: user.id, email: user.email },
-        config.web.jwt_activation,
-        { expiresIn: config.web.jwt_email_duration }
-      );
+      const userVerifyExist = await UserVerification.find({
+        where: {
+          email: email,
+        },
+      });
+
+      const input = Helpers.generateOtp(email);
+
+      if (userVerifyExist && userVerifyExist.length) {
+        await UserVerification.update({ email }, { ...input });
+      } else {
+        await UserVerification.create({ ...input }).save();
+      }
 
       const emailData: IEmail = {
         subject: 'Account Verification',
         template_name: 'sign_verify',
         recipient_email: user.email,
         short_response_message:
-          'verify your account :) . The link will expire in 10 minutes',
-        action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
+          'verify your account :). The Otp will expire in 1 hour',
+        email_data: `${input.otp}`,
       };
 
       const sent = await this.emailService.sendEmail(emailData);
@@ -95,7 +100,7 @@ export class AuthService {
         return res.ok(
           user,
           'An Email has been sent to ' +
-            `${user.email}. Please follow the instructions to ${emailData.short_response_message}`
+            `${user.email}. Please use OTP to ${emailData.short_response_message}`
         );
       }
     } catch (error) {
@@ -107,24 +112,42 @@ export class AuthService {
   };
 
   accountActivation = async (req: IRequest, res: IResponse) => {
-    const { token }: any = req.query;
-    if (token) {
-      jwt.verify(token, config.web.jwt_activation, async (err, decoded) => {
-        if (err) {
-          return res.forbidden(
-            { err },
-            'Verification link expired. Please try again'
-          );
-        }
-        const property = await this.userRepository.findUserById(decoded?.id);
-        await this.userRepository.saveUser({
-          ...property, // existing fields
-          verified_at: new Date(), // updated fields
-        });
-        return res.ok(null, 'User Verified Successfully');
+    const { email, otp } = req.body;
+
+    try {
+      const userExist = await UserVerification.find({
+        where: {
+          email: email,
+          otp,
+        },
       });
-    } else {
-      return res.serverError(null, 'Something went wrong. Please try again.');
+
+      if (!userExist || userExist.length <= 0) {
+        throw new Error('Invalid OTP. Please input valid OTP sent to your email');
+      }
+
+      if (!userExist || userExist.length <= 0) {
+        throw new Error(
+          'Invalid OTP. Please generate new OTP with your correct email address'
+        );
+      }
+
+      if (userExist[0].expiresAt.getTime() < new Date().getTime()) {
+        throw new Error('OTP expired!. Please request a new one');
+      }
+      const property = await this.userRepository.findUserByEmail(email);
+
+      await this.userRepository.saveUser({
+        ...property, // existing fields
+        verified_at: new Date(), // updated fields
+      });
+
+      return res.ok(null, 'User Verified Successfully');
+    } catch (error) {
+      return res.serverError(
+        error,
+        error?.message || 'Something went wrong. Please try again.'
+      );
     }
   };
 
@@ -143,19 +166,27 @@ export class AuthService {
         return res.badGateway(null, 'You are already verified, Please kindly login');
       }
 
-      const token = jwt.sign(
-        { id: user.id, email: user.email },
-        config.web.jwt_activation,
-        { expiresIn: config.web.jwt_email_duration }
-      );
+      const userVerifyExist = await UserVerification.find({
+        where: {
+          email: email,
+        },
+      });
+
+      const input = Helpers.generateOtp(email);
+
+      if (userVerifyExist && userVerifyExist.length) {
+        await UserVerification.update({ email }, { ...input });
+      } else {
+        await UserVerification.create({ ...input }).save();
+      }
 
       const emailData: IEmail = {
         subject: 'Account Verification',
         template_name: 'sign_verify',
         recipient_email: user.email,
         short_response_message:
-          'verify your password again :) . The link will expire in 10 minutes',
-        action_url: `${config.sendgrid.client_url}/verify-account/?token=${token}`,
+          'verify your account :). The Otp will expire in 1 hour',
+        email_data: `${input.otp}`,
       };
 
       const sent = await this.emailService.sendEmail(emailData);
@@ -163,14 +194,14 @@ export class AuthService {
       if (sent) {
         return res.ok(
           user,
-          'An Email has been sent to ' +
-            `${user.email}. Please follow the instructions to ${emailData.short_response_message}`
+          'An Email has been re-sent to ' +
+            `${user.email}. Please use OTP to ${emailData.short_response_message}`
         );
       }
     } catch (err) {
       return res.forbidden(
         err,
-        err.message || 'An error occured while creating account'
+        err.message || 'An error occured while resending activation email'
       );
     }
   };
@@ -202,12 +233,12 @@ export class AuthService {
         'ea-kazi'
       );
       // 2.Check if user is verified
-      // if (!user.verified_at) {
-      //   return res.badGateway(
-      //     null,
-      //     'You are not verified, check your email to verify your account or resend activation email'
-      //   );
-      // }
+      if (!user.verified_at) {
+        return res.badGateway(
+          null,
+          'You are not verified, check your email to verify your account or resend activation OTP'
+        );
+      }
 
       //3. Check if password is valid
       if (!(await User.comparePasswords(password, user.password))) {
@@ -225,7 +256,6 @@ export class AuthService {
       };
       return res.ok(data, 'Login Success');
     } catch (err) {
-      console.log(err);
       return res.serverError(err, 'Invalid email or password');
     }
   };
@@ -255,13 +285,8 @@ export class AuthService {
           email: email,
         },
       });
-      const format = 'YYYY-MM-DD HH:mm:ss';
-      const date = moment(Date.now() + 3600000).format(format);
-      const input = {
-        email,
-        otp: `${Math.floor(1000 + Math.random() * 9000)}`,
-        expiresAt: date,
-      };
+
+      const input = Helpers.generateOtp(email);
 
       if (userExist && userExist.length) {
         await PasswordReset.update({ email }, { ...input });

@@ -25,3 +25,4 @@ export * from './1678814182993-job_category';
 export * from './1678814353681-course_category';
 export * from './1678877657252-update-course';
 export * from './1678878259951-update-job';
+export * from './1679986275877-user_verification';

@@ -10,7 +10,7 @@
     "build": "npm run clean && tsc",
     "start": "node ./dist",
     "migrate": "yarn typeorm migration:generate ./src/migrations/added-user-entity -d ./src/utils/data-source.ts",
-    "create:migration": "ypeorm migration:create ./src/database/migrations/job_category",
+    "create:migration": "typeorm migration:create ./src/database/migrations/job_category",
     "db:push": "yarn typeorm migration:run -d src/utils/data-source.ts",
     "docker:build": "docker-compose build",
     "docker:bash": "docker-compose up"

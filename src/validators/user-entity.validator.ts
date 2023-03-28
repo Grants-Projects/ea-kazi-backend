@@ -76,10 +76,16 @@ class UserEntityValidator {
 
   accountActivation = validate(
     checkSchema({
-      token: {
-        in: ['query'],
-        isString: {
-          errorMessage: 'token must be a string',
+      email: {
+        in: ['body'],
+        isEmail: {
+          errorMessage: 'Input a valid email',
+        },
+      },
+      otp: {
+        in: ['body'],
+        notEmpty: {
+          errorMessage: 'OTP field is required',
         },
       },
     })
