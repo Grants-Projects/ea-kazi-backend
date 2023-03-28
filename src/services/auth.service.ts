@@ -99,6 +99,7 @@ export class AuthService {
         );
       }
     } catch (error) {
+      console.log("register error", error)
       return res.forbidden(
         error,
         error.message || 'An error occured while creating account'
