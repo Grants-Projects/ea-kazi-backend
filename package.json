@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "copy": "cpy 'src/templates/*.ejs' 'dist/templates'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
     "clean": "rm -fr dist",
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && npm run copy && tsc",
     "start": "node ./dist",
     "migrate": "yarn typeorm migration:generate ./src/migrations/added-user-entity -d ./src/utils/data-source.ts",
     "create:migration": "ypeorm migration:create ./src/database/migrations/job_category",
@@ -63,6 +64,7 @@
     "@types/node": "^18.6.3",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
+    "cpy-cli": "^4.2.0",
     "eslint": "^7.7.0"
   },
   "engines": {

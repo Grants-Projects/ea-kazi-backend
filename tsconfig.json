@@ -13,12 +13,6 @@
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "src/**/*.ts",
-    "**/*.ejs"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.ejs", "src/templates/*.ejs"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
